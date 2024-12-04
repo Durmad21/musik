@@ -514,7 +514,8 @@
             document.getElementById('result').textContent = '';
             document.getElementById('next-btn').style.display = 'none';
           }
-      
+            document.getElementById('back-btn').addEventListener('click', function() {
+            window.history.back(); // Kembali ke halaman sebelumnya
           document.addEventListener("DOMContentLoaded", () => {
             displayQuestion();
             document.getElementById('next-btn').onclick = nextQuestion;
