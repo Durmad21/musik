@@ -1,0 +1,552 @@
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Kanji</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap">
+    <style>
+      body {
+        font-family: 'Noto Sans JP', sans-serif;
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(to right, #FFB6C1, #FF6347);
+        background-size: cover;
+        color: white;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      h1 {
+        color: #FFFF00;
+        font-size: 50px;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      #question-container {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .question {
+        font-size: 39px;
+        margin-bottom: 20px;
+        color: yellow;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .kanji {
+        font-size: 85px;
+        margin-bottom: 80px;
+        color: black;
+      }
+
+      .choices {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .choice {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        margin: 10px;
+        width: 90%;
+        max-width: 350px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 22px;
+        transition: transform 0.2s ease;
+      }
+
+      .choice:hover {
+        transform: scale(1.1);
+      }
+
+      .choice:active {
+        transform: scale(0.95);
+      }
+
+      .result {
+        font-size: 25px;
+        margin-top: 20px;
+      }
+
+      .next-btn {
+        margin-top: 10px;
+        background-color: #008CBA;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      .next-btn:hover {
+        background-color: #005f73;
+      }
+
+      .lives {
+        font-size: 24px;
+        color: red;
+        margin-bottom: 20px;
+      }
+
+/* New Back Button */
+     .back-btn {
+       position: fixed;
+       bottom: 50px;
+       right: 20px;
+       background-color: #008CBA;
+       color: white;
+       padding: 15px 20px;
+       border: none;
+       border-radius: 20px;
+       cursor: pointer;
+     }
+     
+     .back-btn:hover {
+       background-color: #d32f2f;
+     }
+
+      /* Media Query untuk layar kecil (handphone) */
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 36px;
+        }
+
+        .question {
+          font-size: 30px;
+        }
+
+        .kanji {
+          font-size: 65px;
+        }
+
+        .choice {
+          font-size: 20px;
+          width: 80%;
+        }
+
+        .result {
+          font-size: 25px;
+          font-weight: bold;
+          text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+        }
+
+        .next-btn {
+          font-size: 18px;
+          padding: 8px 12px;
+        }
+
+        /* Kembali Button Style Adjustments for small screens */
+        .back-btn {
+          font-size: 18px;
+          padding: 8px 12px;
+        }
+      }
+
+      /* Media Query untuk layar ekstra kecil (handphone sangat kecil) */
+      @media (max-width: 375px) {
+        h1 {
+          font-size: 30px;
+        }
+
+        .question {o
+          font-size: 26px;
+        }
+
+        .kanji {
+          font-size: 55px;
+        }
+
+        .choice {
+          font-size: 18px;
+          width: 90%;
+        }
+
+        .result {
+          font-size: 20px;
+        }
+
+        .next-btn {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+
+        .back-btn {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tebak Kanji</h1>
+    <div id="question-container">
+      <p class="question" id="question"> <span id="kanji" class="kanji"></span></p>
+      <div class="lives" id="lives">❤️❤️</div>
+      <div class="choices" id="choices"></div>
+      <div class="result" id="result"></div>
+      <button class="back-btn" onclick="window.location.href='https://adewij.github.io/musik/index.html';">Kembali</button>
+      <button class="next-btn" id="next-btn" style="display: none;">Lanjut</button>
+
+    <!-- Audio autoplay loop -->
+    <audio id="background-audio" loop>
+      <source src="https://adewij.github.io/Adewij/backsound.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+    <script>
+      const correctAudio = new Audio('https://adewij.github.io/Adewij/correct.mp3');
+      const wrongAudio = new Audio('https://adewij.github.io/Adewij/wrong.mp3');
+      const backgroundAudio = document.getElementById('background-audio');
+      document.body.addEventListener('click', () => {
+        if (backgroundAudio.paused) {
+          backgroundAudio.play().catch((error) => {
+            console.error("Audio cannot be played automatically:", error);
+          });
+        }
+      })
+        const kanjiList = [
+          { kanji: '言', answer: 'Kata', romaji: 'Gen / Gon' },
+          { kanji: '手', answer: 'Tangan', romaji: 'Te' },
+          { kanji: '自', answer: 'Diri', romaji: 'Ji' },
+          { kanji: '者', answer: 'Orang', romaji: 'Sha' },
+          { kanji: '事', answer: 'Perkara', romaji: 'Koto' },
+          { kanji: '思', answer: 'Berpikir', romaji: 'Omou' },
+          { kanji: '会', answer: 'Bertemu', romaji: 'Kai' },
+          { kanji: '家', answer: 'Rumah', romaji: 'Ie / Ka' },
+          { kanji: '的', answer: 'Tanda', romaji: 'Teki' },
+          { kanji: '方', answer: 'Arah', romaji: 'Hou / Kata' },
+          { kanji: '地', answer: 'Tanah', romaji: 'Chi' },
+          { kanji: '目', answer: 'Mata', romaji: 'Me' },
+          { kanji: '場', answer: 'Tempat', romaji: 'Ba' },
+          { kanji: '代', answer: 'Wakil', romaji: 'Dai / Tai' },
+          { kanji: '私', answer: 'Saya', romaji: 'Watashi / Shi' },
+          { kanji: '立', answer: 'Berdiri', romaji: 'Tatsu / Ritsu' },
+          { kanji: '物', answer: 'Barang', romaji: 'Mono / Butsu' },
+          { kanji: '田', answer: 'Sawah', romaji: 'Ta' },
+          { kanji: '体', answer: 'Tubuh', romaji: 'Karada' },
+          { kanji: '動', answer: 'Bergerak', romaji: 'Ugoku / Dou' },
+          { kanji: '社', answer: 'Perusahaan', romaji: 'Sha' },
+          { kanji: '知', answer: 'Tahu', romaji: 'Shiru / Chi' },
+          { kanji: '理', answer: 'Alasan', romaji: 'Riyuu / Ri' },
+          { kanji: '同', answer: 'Sama', romaji: 'Dou' },
+          { kanji: '心', answer: 'Hati', romaji: 'Kokoro' },
+          { kanji: '発', answer: 'Keluar', romaji: 'Hatsu / Hotsu' },
+          { kanji: '作', answer: 'Membuat', romaji: 'Saku / Saku' },
+          { kanji: '新', answer: 'Baru', romaji: 'Shin' },
+          { kanji: '世', answer: 'Dunia', romaji: 'Se' },
+          { kanji: '度', answer: 'Derajat', romaji: 'Do / Toku' },
+          { kanji: '明', answer: 'Terang', romaji: 'Mei / Myou' },
+          { kanji: '力', answer: 'Kekuatan', romaji: 'Chikara' },
+          { kanji: '意', answer: 'Niat', romaji: 'I' },
+          { kanji: '用', answer: 'Menggunakan', romaji: 'You' },
+          { kanji: '主', answer: 'Utama', romaji: 'Shu / Su' },
+          { kanji: '通', answer: 'Melalui', romaji: 'Tooru / Tsuu' },
+          { kanji: '文', answer: 'Kalimat', romaji: 'Bun / Mon' },
+          { kanji: '屋', answer: 'Toko', romaji: 'Ya' },
+          { kanji: '業', answer: 'Pekerjaan', romaji: 'Gyou / Waku' },
+          { kanji: '持', answer: 'Memegang', romaji: 'Mochi' },
+          { kanji: '道', answer: 'Jalan', romaji: 'Michi / Dou' },
+          { kanji: '身', answer: 'Tubuh', romaji: 'Mi' },
+          { kanji: '不', answer: 'Tidak', romaji: 'Fu' },
+          { kanji: '口', answer: 'Mulut', romaji: 'Kuchi' },
+          { kanji: '多', answer: 'Banyak', romaji: 'Oo / Ta' },
+          { kanji: '野', answer: 'Lapangan', romaji: 'No / Ya' },
+          { kanji: '考', answer: 'Berpikir', romaji: 'Kangaeru' },
+          { kanji: '開', answer: 'Membuka', romaji: 'Hiraku / Kai' },
+          { kanji: '教', answer: 'Mengajar', romaji: 'Oshieru / Kyou' },
+          { kanji: '近', answer: 'Dekat', romaji: 'Chikai / Kin' },
+          { kanji: '以', answer: 'Dengan', romaji: 'I' },
+          { kanji: '問', answer: 'Tanya', romaji: 'To / Mon' },
+          { kanji: '正', answer: 'Benar', romaji: 'Sei / Shou' },
+          { kanji: '真', answer: 'Benar', romaji: 'Shin' },
+          { kanji: '味', answer: 'Rasa', romaji: 'Aji' },
+          { kanji: '界', answer: 'Dunia', romaji: 'Kai' },
+          { kanji: '無', answer: 'Tidak ada', romaji: 'Mu' },
+          { kanji: '少', answer: 'Sedikit', romaji: 'Shou / Suku' },
+          { kanji: '海', answer: 'Laut', romaji: 'Umi' },
+          { kanji: '切', answer: 'Memotong', romaji: 'Setsu / Kiri' },
+          { kanji: '重', answer: 'Berat', romaji: 'Omoi / Ju' },
+          { kanji: '集', answer: 'Kumpul', romaji: 'Atsumeru / Shuu' },
+          { kanji: '員', answer: 'Anggota', romaji: 'In' },
+          { kanji: '公', answer: 'Umum', romaji: 'Kou' },
+          { kanji: '画', answer: 'Gambar', romaji: 'Kaku' },
+          { kanji: '死', answer: 'Mati', romaji: 'Shi' },
+          { kanji: '安', answer: 'Aman', romaji: 'Yasu / An' },
+          { kanji: '親', answer: 'Orang tua', romaji: 'Shin / Oya' },
+          { kanji: '強', answer: 'Kuat', romaji: 'Kyou / Gyou' },
+          { kanji: '使', answer: 'Menggunakan', romaji: 'Tsukau / Shi' },
+          { kanji: '朝', answer: 'Pagi', romaji: 'Asa / Chou' },
+          { kanji: '題', answer: 'Topik', romaji: 'Dai' },
+          { kanji: '仕', answer: 'Melakukan', romaji: 'Shi' },
+          { kanji: '京', answer: 'Ibukota', romaji: 'Kyou / Kei' },
+          { kanji: '足', answer: 'Kaki', romaji: 'Ashi / Soku' },
+          { kanji: '品', answer: 'Barang', romaji: 'Hin' },
+          { kanji: '着', answer: 'Pakai', romaji: 'Chaku / Kuru' },
+          { kanji: '別', answer: 'Pemisah', romaji: 'Betsu' },
+          { kanji: '音', answer: 'Suara', romaji: 'Oto / On' },
+          { kanji: '元', answer: 'Asal', romaji: 'Moto / Gen' },
+          { kanji: '特', answer: 'Khusus', romaji: 'Toku' },
+          { kanji: '風', answer: 'Angin', romaji: 'Kaze / Fuu' },
+          { kanji: '夜', answer: 'Malam', romaji: 'Yoru / Ya' },
+          { kanji: '空', answer: 'Langit', romaji: 'Sora / Ku' },
+          { kanji: '有', answer: 'Ada', romaji: 'Aru / Yu' },
+          { kanji: '起', answer: 'Bangun', romaji: 'Okiru / Ki' },
+          { kanji: '運', answer: 'Nasib', romaji: 'Un' },
+          { kanji: '料', answer: 'Biaya', romaji: 'Ryou' },
+          { kanji: '楽', answer: 'Menyenangkan', romaji: 'Raku / Gaku' },
+          { kanji: '色', answer: 'Warna', romaji: 'Iro / Shiki' },
+          { kanji: '帰', answer: 'Kembali', romaji: 'Kaeru / Ki' },
+          { kanji: '歩', answer: 'Berjalan', romaji: 'Aru / Ho' },
+          { kanji: '悪', answer: 'Buruk', romaji: 'Warui / Aku' },
+          { kanji: '広', answer: 'Luas', romaji: 'Hiroi / Kou' },
+          { kanji: '店', answer: 'Toko', romaji: 'Mise / Ten' },
+          { kanji: '町', answer: 'Kota', romaji: 'Machi' },
+          { kanji: '住', answer: 'Tinggal', romaji: 'Sumu' },
+          { kanji: '売', answer: 'Menjual', romaji: 'Uru' },
+          { kanji: '待', answer: 'Menunggu', romaji: 'Matsu' },
+          { kanji: '古', answer: 'Tua', romaji: 'Furu' },
+          { kanji: '始', answer: 'Mulai', romaji: 'Hajimeru' },
+          { kanji: '終', answer: 'Selesai', romaji: 'Owaru / Shu' },
+          { kanji: '計', answer: 'Menghitung', romaji: 'Kei' },
+          { kanji: '院', answer: 'Rumah Sakit', romaji: 'In' },
+          { kanji: '送', answer: 'Mengirim', romaji: 'Okuru' },
+          { kanji: '族', answer: 'Keluarga', romaji: 'Zoku' },
+          { kanji: '映', answer: 'Memantulkan', romaji: 'Utsusu / Ei' },
+          { kanji: '買', answer: 'Membeli', romaji: 'Kau / Bai' },
+          { kanji: '病', answer: 'Sakit', romaji: 'Byou' },
+          { kanji: '早', answer: 'Cepat', romaji: 'Hayai / Sou' },
+          { kanji: '質', answer: 'Kualitas', romaji: 'Shitsu' },
+          { kanji: '台', answer: 'Panggung', romaji: 'Dai' },
+          { kanji: '室', answer: 'Ruangan', romaji: 'Shitsu' },
+          { kanji: '可', answer: 'Boleh', romaji: 'Ka' },
+          { kanji: '建', answer: 'Membangun', romaji: 'Tateru / Ken' },
+          { kanji: '転', answer: 'Berputar', romaji: 'Kuru / Ten' },
+          { kanji: '医', answer: 'Dokter', romaji: 'I' },
+          { kanji: '止', answer: 'Berhenti', romaji: 'Tomeru / Shi' },
+          { kanji: '字', answer: 'Huruf', romaji: 'Ji' },
+          { kanji: '工', answer: 'Kerja', romaji: 'Kou' },
+          { kanji: '急', answer: 'Cepat', romaji: 'Isogu / Kyu' },
+          { kanji: '図', answer: 'Gambar', romaji: 'Zu / To' },
+          { kanji: '黒', answer: 'Hitam', romaji: 'Kuro' },
+          { kanji: '花', answer: 'Bunga', romaji: 'Hana' },
+          { kanji: '英', answer: 'Inggris', romaji: 'Ei' },
+          { kanji: '走', answer: 'Lari', romaji: 'Hashiru' },
+          { kanji: '青', answer: 'Biru', romaji: 'Ao' },
+          { kanji: '答', answer: 'Jawaban', romaji: 'Kotae' },
+          { kanji: '紙', answer: 'Kertas', romaji: 'Kami' },
+          { kanji: '歌', answer: 'Lagu', romaji: 'Uta' },
+          { kanji: '注', answer: 'Menambahkan', romaji: 'Chuu' },
+          { kanji: '赤', answer: 'Merah', romaji: 'Aka' },
+          { kanji: '春', answer: 'Musim Semi', romaji: 'Haru' },
+          { kanji: '館', answer: 'Gedung', romaji: 'Kan' },
+          { kanji: '旅', answer: 'Perjalanan', romaji: 'Tabi' },
+          { kanji: '験', answer: 'Pengalaman', romaji: 'Ken' },
+          { kanji: '写', answer: 'Menyalin', romaji: 'Utsusu / Sha' },
+          { kanji: '去', answer: 'Pergi', romaji: 'Suru / Kyo' },
+          { kanji: '研', answer: 'Mempelajari', romaji: 'Ken' },
+          { kanji: '飲', answer: 'Minum', romaji: 'Nomu' },
+          { kanji: '肉', answer: 'Daging', romaji: 'Niku' },
+          { kanji: '服', answer: 'Pakaian', romaji: 'Fuku' },
+          { kanji: '銀', answer: 'Perak', romaji: 'Gin' },
+          { kanji: '茶', answer: 'Teh', romaji: 'Cha' },
+          { kanji: '究', answer: 'Menyelidiki', romaji: 'Kyuu' },
+          { kanji: '洋', answer: 'Barat', romaji: 'You' },
+          { kanji: '兄', answer: 'Kakak laki-laki', romaji: 'Ani' },
+          { kanji: '秋', answer: 'Musim Gugur', romaji: 'Aki' },
+          { kanji: '堂', answer: 'Hala', romaji: 'Dou' },
+          { kanji: '週', answer: 'Minggu', romaji: 'Shuu' },
+          { kanji: '習', answer: 'Belajar', romaji: 'Shuu' },
+          { kanji: '試', answer: 'Menguji', romaji: 'Shiken' },
+          { kanji: '夏', answer: 'Musim Panas', romaji: 'Natsu' },
+          { kanji: '弟', answer: 'Adik laki-laki', romaji: 'Otouto' },
+          { kanji: '鳥', answer: 'Burung', romaji: 'Tori' },
+          { kanji: '犬', answer: 'Anjing', romaji: 'Inu' },
+          { kanji: '夕', answer: 'Sore', romaji: 'Yuu' },
+          { kanji: '魚', answer: 'Ikan', romaji: 'Sakana' },
+          { kanji: '借', answer: 'Meminjam', romaji: 'Kariru' },
+          { kanji: '飯', answer: 'Nasi', romaji: 'Meshi' },
+          { kanji: '駅', answer: 'Stasiun', romaji: 'Eki' },
+          { kanji: '昼', answer: 'Siang', romaji: 'Hiru' },
+          { kanji: '冬', answer: 'Musim Dingin', romaji: 'Fuyu' },
+          { kanji: '姉', answer: 'Kakak perempuan', romaji: 'Ane' },
+          { kanji: '曜', answer: 'Hari', romaji: 'You' },
+          { kanji: '漢', answer: 'Tionghoa', romaji: 'Kan' },
+          { kanji: '牛', answer: 'Sapi', romaji: 'Ushi' },
+          { kanji: '妹', answer: 'Adik perempuan', romaji: 'Imouto' },
+          { kanji: '貸', answer: 'Meminjamkan', romaji: 'Kashiru' },
+          { kanji: '勉', answer: 'Belajar', romaji: 'Ben' }
+        ];
+        
+         const wrongAnswers = [
+          'Satu', 'Belajar', 'Mulut', 'Mobil', 'Pohon', 'Laki-laki', 'Apa', 'Atas', 
+          'Kaki', 'Kiri', 'Kanan', 'Putih', 'Bulan', 'Matahari', 'Hari', 'Minggu', 
+          'Tahun', 'Bulan', 'Perempuan', 'Teman', 'Keluarga', 'Anak', 'Ayah', 'Ibu', 
+          'Tempat', 'Orang', 'Alat', 'Pekerjaan', 'Kehidupan', 'Buka', 'Tutup', 'Makan', 
+          'Minum', 'Tidur', 'Bekerja', 'Belajar', 'Berbicara', 'Mendengar', 'Melihat', 
+          'Pergi', 'Datang', 'Kembali', 'Lihat', 'Berjalan', 'Menggunakan', 'Membawa', 
+          'Menulis', 'Membaca', 'Menanyakan', 'Menerima', 'Membantu', 'Menemui', 'Mencari', 
+          'Menjadi', 'Berada', 'Ada', 'Tidak ada', 'Sampai', 'Setelah', 'Sebelum', 'Sekarang', 
+          'Besok', 'Kemarin', 'Minggu depan', 'Tadi', 'Tadi malam', 'Setiap', 'Kemudian', 
+          'Tepat', 'Sama', 'Berbeda', 'Kecil', 'Besar', 'Tinggi', 'Pendek', 'Lebar', 'Sempit', 
+          'Panjang', 'Singkat', 'Penuh', 'Kosong', 'Sempurna', 'Salah', 'Benar', 'Baik', 'Buruk', 
+          'Cepat', 'Lambat', 'Dingin', 'Panas', 'Lembut', 'Keras', 'Mudah', 'Sulit', 'Mahal', 
+          'Murah', 'Jauh', 'Dekat', 'Bagus', 'Banyak', 'Sedikit', 'Baru', 'Lama', 'Tua', 'Muda', 
+          'Bersih', 'Kotor', 'Cantik', 'Tampan', 'Jelek', 'Gugup', 'Santai', 'Kuat', 'Lemah', 
+          'Pahit', 'Manis', 'Asin', 'Acid', 'Bitter', 'Lembut', 'Teaspoon', 'Garam', 'Ladang', 
+          'Ruang', 'Sampel', 'Dapur', 'Kamar', 'Lantai', 'Badan', 'Buku', 'Baju', 'Sepatu', 
+          'Meja', 'Kursi', 'Peralatan', 'Kunci', 'Pintu', 'Jendela', 'Dinding', 'Lantai', 
+          'Langit', 'Bintang', 'Mata', 'Telinga', 'Hidung', 'Mulut', 'Muka', 'Tangan', 'Kaki', 
+          'Lengan', 'Punggung', 'Perut', 'Dada', 'Kepala', 'Pakai', 'Sakit', 'Sehat', 'Tumbuh', 
+          'Pernah', 'Sebelum', 'Besar', 'Penting', 'Meninggal', 'Bersyukur', 'Aman', 'Masih'
+        ];
+        
+          let currentQuestionIndex = 0;
+          let lives = 2;
+          let correctAnswersCount = 0;
+          let totalQuestions = kanjiList.length;
+      
+          function generateChoices(question) {
+            const correctAnswer = question.answer;
+            let randomWrongAnswers = [];
+          
+            // Untuk soal tipe angka
+            if (question.type === 'angka') {
+              while (randomWrongAnswers.length < 3) {
+                const wrongAnswer = Math.floor(Math.random() * 10) + 2; // Pilihan angka antara 1-9
+                if (!randomWrongAnswers.includes(wrongAnswer.toString()) && wrongAnswer !== correctAnswer) {
+                  randomWrongAnswers.push(wrongAnswer.toString());
+                }
+              }
+            } 
+            // Untuk soal tipe hari
+            else if (question.type === 'hari') {
+              const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+              while (randomWrongAnswers.length < 3) {
+                const wrongAnswer = days[Math.floor(Math.random() * days.length)];
+                if (!randomWrongAnswers.includes(wrongAnswer) && wrongAnswer !== correctAnswer) {
+                  randomWrongAnswers.push(wrongAnswer);
+                }
+              }
+            } 
+            // Untuk soal tipe bulan
+            else if (question.type === 'bulan') {
+              const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+              while (randomWrongAnswers.length < 3) {
+                const wrongAnswer = months[Math.floor(Math.random() * months.length)];
+                if (!randomWrongAnswers.includes(wrongAnswer) && wrongAnswer !== correctAnswer) {
+                  randomWrongAnswers.push(wrongAnswer);
+                }
+              }
+            } 
+            // Untuk soal tipe lain
+            else {
+              while (randomWrongAnswers.length < 3) {
+                const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+                if (!randomWrongAnswers.includes(wrongAnswer) && wrongAnswer !== correctAnswer) {
+                  randomWrongAnswers.push(wrongAnswer);
+                }
+              }
+            }
+          
+            // Gabungkan jawaban benar dan salah lalu acak
+            const choices = [...randomWrongAnswers, correctAnswer];
+            return shuffle(choices);
+          }
+          
+          function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+          }
+      
+          function displayQuestion() {
+            const question = kanjiList[currentQuestionIndex];
+            document.getElementById('kanji').textContent = question.kanji;
+            const choices = generateChoices(question);
+      
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+      
+            choices.forEach((choice) => {
+              const button = document.createElement('button');
+              button.classList.add('choice');
+              button.textContent = choice;
+              button.onclick = () => checkAnswer(choice, question);
+              choicesContainer.appendChild(button);
+            });
+          }
+      
+          function checkAnswer(selectedAnswer, question) {
+            if (selectedAnswer === question.answer) {
+              correctAudio.play();
+              document.getElementById('result').innerHTML = `✅ Yeeay Benar...🥳 <br> ${question.romaji}`;
+              correctAnswersCount++;
+            } else {
+              wrongAudio.play();
+              lives--;
+              document.getElementById('result').innerHTML = '❌ Uupps Salah...😔';
+              document.getElementById('lives').textContent = '❤️'.repeat(lives);
+            }
+      
+            if (lives <= 0) {
+              nextQuestion(); // Lanjutkan soal setelah nyawa habis
+            } else {
+              document.getElementById('next-btn').style.display = 'block'; // Tombol lanjutkan tampil
+            }
+          }
+          
+          function nextQuestion() {
+            // Setiap kali soal baru dimulai, reset nyawa ke 2
+            lives = 2;
+            document.getElementById('lives').textContent = '❤️❤️'; // Reset tampilan nyawa
+          
+            if (currentQuestionIndex < kanjiList.length - 1) {
+              currentQuestionIndex++;
+              displayQuestion();
+              document.getElementById('result').textContent = '';
+              document.getElementById('next-btn').style.display = 'none';
+            } else {
+              showFinalResult();
+            }
+          }
+      
+          function showFinalResult() {
+            const score = Math.floor((correctAnswersCount / totalQuestions) * 100);
+            const resultText = `Kuis selesai! 🎉<br> Benar:  dari  ${totalQuestions}soal. <br> Skor: ${score}%`;
+            const passOrFail = score >= 80 ? '🎓 Selamat Anda Lulus!' : '❌ Maaf Anda Belum Lulus, Belajar Lagi Ya!';
+            document.getElementById('result').innerHTML = resultText + `<br>${passOrFail}`;
+      
+            document.getElementById('next-btn').textContent = 'Belajar Ulang';
+            document.getElementById('next-btn').onclick = restartQuiz;
+            document.getElementById('next-btn').style.display = 'block';
+          }
+      
+          function restartQuiz() {
+            currentQuestionIndex = 0;
+            lives = 2;
+            correctAnswersCount = 0;
+            document.getElementById('lives').textContent = '❤️❤️';
+            document.getElementById('next-btn').textContent = 'Lanjut';
+            document.getElementById('next-btn').onclick = nextQuestion;
+            displayQuestion();
+            document.getElementById('result').textContent = '';
+            document.getElementById('next-btn').style.display = 'none';
+          }
+      
+          document.addEventListener("DOMContentLoaded", () => {
+            displayQuestion();
+            document.getElementById('next-btn').onclick = nextQuestion;
+          });
+        </script>
+      </body>
+      </html>
