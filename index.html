@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Kanji</title>
+    <style>
+        /* Latar belakang dengan gradien lembut dan animasi */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FFD700, #FFB6C1, #FFC0CB);
+            background-size: 300% 300%;
+            animation: gradientBG 8s ease infinite;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: #fff;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Gaya judul */
+        .title {
+            font-size: 2.9em;
+            font-weight: bold;
+            margin-bottom: 50px;
+            font-family: 'Sawarabi Mincho', serif;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+            color: #2e2e2e; /* Warna teks judul yang lebih gelap agar lebih jelas */
+        }
+
+        /* Gaya tombol */
+        .button {
+            background: #FF6347; /* Warna latar belakang tombol yang cerah */
+            color: #fff; /* Teks tombol berwarna putih */
+            font-size: 1.5em;
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: none;
+            margin: 15px;
+            width: 220px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: #FF4500; /* Warna tombol saat dihover menjadi lebih gelap */
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Gaya untuk tombol jika di klik */
+        .button:active {
+            transform: translateY(2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Judul Utama -->
+    <div class="title">ようこそ！日本語を楽しみながら学びましょう！</div>
+
+    <!-- Tombol Navigasi -->
+    <a href="https://adewij.github.io/musik/KanjiN5.html">
+        <button class="button">KANJI N5</button>
+    </a>
+    <a href="https://adewij.github.io/musik/KanjiN4.html">
+        <button class="button">KANJI N4</button>
+    </a>
+    <a href="https://adewij.github.io/musik/KotobaN5.html">
+        <button class="button">KOTOBA N5</button>
+    </a>
+    <a href="https://adewij.github.io/musik/KotobaN4.html">
+        <button class="button">KOTOBA N4</button>
+    </a>
+
+</body>
+</html>
