@@ -1,0 +1,654 @@
+<html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Kotoba</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap">
+    <style>
+      body {
+        font-family: 'Noto Sans JP', sans-serif;
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(to right, #FFB6C1, #FF6347);
+        background-size: cover;
+        color: white;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      h1 {
+        color: #FFFF00;
+        font-size: 50px;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      #question-container {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .question {
+        font-size: 39px;
+        margin-bottom: 20px;
+        color: yellow;
+        font-weight: bold;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .kotoba {
+        font-size: 85px;
+        margin-bottom: 80px;
+        color: black;
+      }
+
+      .choices {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .choice {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        margin: 10px;
+        width: 90%;
+        max-width: 350px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 22px;
+        transition: transform 0.2s ease;
+      }
+
+      .choice:hover {
+        transform: scale(1.1);
+      }
+
+      .choice:active {
+        transform: scale(0.95);
+      }
+
+      .result {
+        font-size: 25px;
+        margin-top: 20px;
+      }
+
+      .next-btn {
+        margin-top: 10px;
+        background-color: #008CBA;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      .next-btn:hover {
+        background-color: #005f73;
+      }
+
+      .lives {
+        font-size: 24px;
+        color: red;
+        margin-bottom: 20px;
+      }
+
+      /* New Back Button */
+      .back-btn {
+        position: fixed;
+        bottom: 50px;
+        right: 20px;
+        background-color: #008CBA;
+        color: white;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+      
+      .back-btn:hover {
+        background-color: #d32f2f;
+      }
+
+      /* Media Query untuk layar kecil (handphone) */
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 36px;
+        }
+
+        .question {
+          font-size: 30px;
+        }
+
+        .kotoba {
+          font-size: 65px;
+        }
+
+        .choice {
+          font-size: 20px;
+          width: 80%;
+        }
+
+        .result {
+          font-size: 25px;
+          font-weight: bold;
+          text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+        }
+
+        .next-btn {
+          font-size: 18px;
+          padding: 8px 12px;
+        }
+
+        /* Kembali Button Style Adjustments for small screens */
+        .back-btn {
+          font-size: 18px;
+          padding: 8px 12px;
+        }
+      }
+
+      /* Media Query untuk layar ekstra kecil (handphone sangat kecil) */
+      @media (max-width: 375px) {
+        h1 {
+          font-size: 30px;
+        }
+
+        .question {
+          font-size: 26px;
+        }
+
+        .kotoba {
+          font-size: 55px;
+        }
+
+        .choice {
+          font-size: 18px;
+          width: 90%;
+        }
+
+        .result {
+          font-size: 20px;
+        }
+
+        .next-btn {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+
+        .back-btn {
+          font-size: 16px;
+          padding: 8px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tebak Kotoba</h1>
+    <div id="kotoba">question</div>
+    <div id="question-container">
+      <p class="question" id="question"> <span id="Kotoba" class="kotoba"></span></p>
+      <div class="lives" id="lives">❤️❤️</div>
+      <div class="choices" id="choices"></div>
+      <div class="result" id="result"></div>
+      <button class="back-btn" onclick="window.location.href='https://adewij.github.io/musik/index.html';">Kembali</button>
+      <button class="next-btn" id="next-btn" style="display: none;">Lanjut</button>
+
+      <!-- Audio autoplay loop -->
+      <audio id="background-audio" loop>
+        <source src="https://adewij.github.io/Adewij/backsound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+
+      <script>
+        const correctAudio = new Audio('https://adewij.github.io/Adewij/correct.mp3');
+        const wrongAudio = new Audio('https://adewij.github.io/Adewij/wrong.mp3');
+        const backgroundAudio = document.getElementById('background-audio');
+        document.body.addEventListener('click', () => {
+          if (backgroundAudio.paused) {
+            backgroundAudio.play().catch((error) => {
+              console.error("Audio tidak bisa diputar otomatis:", error);
+            });
+          }
+        })
+        const kotobaList = [
+          // 1-20
+          { kotoba: 'あいさつ', answer: 'Salam', romaji: 'Aisatsu' },
+          { kotoba: 'あお', answer: 'Biru', romaji: 'Ao' },
+          { kotoba: 'あか', answer: 'Merah', romaji: 'Aka' },
+          { kotoba: 'あき', answer: 'Musim gugur', romaji: 'Aki' },
+          { kotoba: 'あし', answer: 'Kaki', romaji: 'Ashi' },
+          { kotoba: 'あたま', answer: 'Kepala', romaji: 'Atama' },
+          { kotoba: 'あちら', answer: 'Di sana', romaji: 'Achira' },
+          { kotoba: 'あつい', answer: 'Panas', romaji: 'Atsui' },
+          { kotoba: 'あめ', answer: 'Hujan', romaji: 'Ame' },
+          { kotoba: 'あらう', answer: 'Mencuci', romaji: 'Arau' },
+          { kotoba: 'ある', answer: 'Ada', romaji: 'Aru' },
+          { kotoba: 'あんしん', answer: 'Tenang', romaji: 'Anshin' },
+          { kotoba: 'いいえ', answer: 'Tidak', romaji: 'Iie' },
+          { kotoba: 'いえ', answer: 'Rumah', romaji: 'Ie' },
+          { kotoba: 'いく', answer: 'Pergi', romaji: 'Iku' },
+          { kotoba: 'いけ', answer: 'Kolam', romaji: 'Ike' },
+          { kotoba: 'いそがしい', answer: 'Sibuk', romaji: 'Isogashii' },
+          { kotoba: 'いち', answer: 'Satu', romaji: 'Ichi' },
+          { kotoba: 'いちご', answer: 'Strawberry', romaji: 'Ichigo' },
+          { kotoba: 'いぬ', answer: 'Anjing', romaji: 'Inu' },
+        
+          // 21-40
+          { kotoba: 'いま', answer: 'Sekarang', romaji: 'Ima' },
+          { kotoba: 'いもうと', answer: 'Adik perempuan', romaji: 'Imouto' },
+          { kotoba: 'いりぐち', answer: 'Pintu masuk', romaji: 'Iriguchi' },
+          { kotoba: 'うえ', answer: 'Atas', romaji: 'Ue' },
+          { kotoba: 'うた', answer: 'Lagu', romaji: 'Uta' },
+          { kotoba: 'うたう', answer: 'Bernyanyi', romaji: 'Utau' },
+          { kotoba: 'うけつけ', answer: 'Meja resepsionis', romaji: 'Uketsuke' },
+          { kotoba: 'うしろ', answer: 'Belakang', romaji: 'Ushiro' },
+          { kotoba: 'うすい', answer: 'Tipis', romaji: 'Usui' },
+          { kotoba: 'うた', answer: 'Lagu', romaji: 'Uta' },
+          { kotoba: 'うみ', answer: 'Laut', romaji: 'Umi' },
+          { kotoba: 'うりば', answer: 'Bagian penjualan', romaji: 'Uriba' },
+          { kotoba: 'えき', answer: 'Stasiun', romaji: 'Eki' },
+          { kotoba: 'えんぴつ', answer: 'Pensil', romaji: 'Enpitsu' },
+          { kotoba: 'おいしい', answer: 'Enak', romaji: 'Oishii' },
+          { kotoba: 'おおきい', answer: 'Besar', romaji: 'Ookii' },
+          { kotoba: 'おおきな', answer: 'Besar', romaji: 'Ookina' },
+          { kotoba: 'おかあさん', answer: 'Ibu', romaji: 'Okaasan' },
+          { kotoba: 'おかね', answer: 'Uang', romaji: 'Okane' },
+          { kotoba: 'おきる', answer: 'Bangun', romaji: 'Okiru' },
+        
+          // 41-60
+          { kotoba: 'おくさん', answer: 'Istri (orang lain)', romaji: 'Okusan' },
+          { kotoba: 'おしえる', answer: 'Mengajarkan', romaji: 'Oshieru' },
+          { kotoba: 'おじいさん', answer: 'Kakek', romaji: 'Ojiisan' },
+          { kotoba: 'おじさん', answer: 'Paman', romaji: 'Ojisan' },
+          { kotoba: 'おせんべい', answer: 'Kerupuk', romaji: 'Osenbei' },
+          { kotoba: 'おそい', answer: 'Lambat', romaji: 'Osoi' },
+          { kotoba: 'おちゃ', answer: 'Teh', romaji: 'Ocha' },
+          { kotoba: 'おてあらい', answer: 'Kamar kecil', romaji: 'Otearai' },
+          { kotoba: 'おとうさん', answer: 'Ayah', romaji: 'Otousan' },
+          { kotoba: 'おとこのこ', answer: 'Anak laki-laki', romaji: 'Otokonoko' },
+          { kotoba: 'おんなのこ', answer: 'Anak perempuan', romaji: 'Onnanoko' },
+          { kotoba: 'おんな', answer: 'Perempuan', romaji: 'Onna' },
+          { kotoba: 'おわる', answer: 'Selesai', romaji: 'Owaru' },
+          { kotoba: 'およぐ', answer: 'Berenang', romaji: 'Oyogu' },
+          { kotoba: 'おりる', answer: 'Turun', romaji: 'Oriru' },
+          { kotoba: 'おわる', answer: 'Selesai', romaji: 'Owaru' },
+          { kotoba: 'かいしゃ', answer: 'Perusahaan', romaji: 'Kaisha' },
+          { kotoba: 'かがく', answer: 'Ilmu pengetahuan', romaji: 'Kagaku' },
+          { kotoba: 'かける', answer: 'Menelepon', romaji: 'Kakeru' },
+          { kotoba: 'かぜ', answer: 'Angin', romaji: 'Kaze' },
+        
+          // 61-80
+          { kotoba: 'かぞく', answer: 'Keluarga', romaji: 'Kazoku' },
+          { kotoba: 'かた', answer: 'Bahu', romaji: 'Kata' },
+          { kotoba: 'かばん', answer: 'Tas', romaji: 'Kaban' },
+          { kotoba: 'かりる', answer: 'Meminjam', romaji: 'Kariru' },
+          { kotoba: 'かわ', answer: 'Sungai', romaji: 'Kawa' },
+          { kotoba: 'きいろ', answer: 'Kuning', romaji: 'Kiiro' },
+          { kotoba: 'きく', answer: 'Mendengar', romaji: 'Kiku' },
+          { kotoba: 'きた', answer: 'Utara', romaji: 'Kita' },
+          { kotoba: 'きっぷ', answer: 'Tiket', romaji: 'Kippu' },
+          { kotoba: 'きもち', answer: 'Perasaan', romaji: 'Kimochi' },
+          { kotoba: 'きょう', answer: 'Hari ini', romaji: 'Kyou' },
+          { kotoba: 'きょうしつ', answer: 'Kelas', romaji: 'Kyoushitsu' },
+          { kotoba: 'きょうだい', answer: 'Saudara', romaji: 'Kyoudai' },
+          { kotoba: 'きれい', answer: 'Cantik', romaji: 'Kirei' },
+          { kotoba: 'きんえん', answer: 'Dilarang merokok', romaji: 'Kinen' },
+          { kotoba: 'くつ', answer: 'Sepatu', romaji: 'Kutsu' },
+          { kotoba: 'くるま', answer: 'Mobil', romaji: 'Kuruma' },
+          { kotoba: 'けんきゅう', answer: 'Penelitian', romaji: 'Kenkyuu' },
+          { kotoba: 'こうえん', answer: 'Taman', romaji: 'Kouen' },
+          { kotoba: 'こうこう', answer: 'SMA', romaji: 'Koukou' },
+        
+          // 81-100
+          { kotoba: 'こえ', answer: 'Suara', romaji: 'Koe' },
+          { kotoba: 'こし', answer: 'Pinggang', romaji: 'Koshi' },
+          { kotoba: 'こども', answer: 'Anak-anak', romaji: 'Kodomo' },
+          { kotoba: 'ごご', answer: 'P.M.', romaji: 'Gogo' },
+          { kotoba: 'ごぜん', answer: 'A.M.', romaji: 'Gozen' },
+          { kotoba: 'ごはん', answer: 'Nasi', romaji: 'Gohan' },
+          { kotoba: 'ごみ', answer: 'Sampah', romaji: 'Gomi' },
+          { kotoba: 'さくら', answer: 'Bunga sakura', romaji: 'Sakura' },
+          { kotoba: 'さけ', answer: 'Sake', romaji: 'Sake' },
+          { kotoba: 'さようなら', answer: 'Selamat tinggal', romaji: 'Sayounara' },
+          { kotoba: 'さむい', answer: 'Dingin', romaji: 'Samui' },
+          { kotoba: 'さんぽ', answer: 'Jalan-jalan', romaji: 'Sanpo' },
+          { kotoba: 'しごと', answer: 'Pekerjaan', romaji: 'Shigoto' },
+          { kotoba: 'しまる', answer: 'Tutup', romaji: 'Shimaru' },
+          { kotoba: 'じしょ', answer: 'Kamus', romaji: 'Jisho' },
+          { kotoba: 'しずか', answer: 'Tenang', romaji: 'Shizuka' },
+          { kotoba: 'しろ', answer: 'Putih', romaji: 'Shiro' },
+          { kotoba: 'じゃんけん', answer: 'Permainan batu-gunting-kertas', romaji: 'Janken' },
+          { kotoba: 'すき', answer: 'Suka', romaji: 'Suki' },
+          { kotoba: 'すこし', answer: 'Sedikit', romaji: 'Sukoshi' },
+          // 101-200
+          { kotoba: 'すみません', answer: 'Permisi / Maaf', romaji: 'Sumimasen' },
+          { kotoba: 'せんせい', answer: 'Guru', romaji: 'Sensei' },
+          { kotoba: 'そう', answer: 'Begitu', romaji: 'Sou' },
+          { kotoba: 'そうですね', answer: 'Benar ya', romaji: 'Sou desu ne' },
+          { kotoba: 'それ', answer: 'Itu', romaji: 'Sore' },
+          { kotoba: 'それでは', answer: 'Kalau begitu', romaji: 'Sore de wa' },
+          { kotoba: 'たかい', answer: 'Tinggi, mahal', romaji: 'Takai' },
+          { kotoba: 'たくさん', answer: 'Banyak', romaji: 'Takusan' },
+          { kotoba: 'たてもの', answer: 'Bangunan', romaji: 'Tatemono' },
+          { kotoba: 'たのしい', answer: 'Menyenangkan', romaji: 'Tanoshii' },
+          { kotoba: 'たべる', answer: 'Makan', romaji: 'Taberu' },
+          { kotoba: 'だいじょうぶ', answer: 'Baik-baik saja', romaji: 'Daijoubu' },
+          { kotoba: 'だれ', answer: 'Siapa', romaji: 'Dare' },
+          { kotoba: 'ちいさい', answer: 'Kecil', romaji: 'Chiisai' },
+          { kotoba: 'ちかい', answer: 'Dekat', romaji: 'Chikai' },
+          { kotoba: 'ちょっと', answer: 'Sedikit', romaji: 'Chotto' },
+          { kotoba: 'つかう', answer: 'Menggunakan', romaji: 'Tsukau' },
+          { kotoba: 'つくえ', answer: 'Meja', romaji: 'Tsukue' },
+          { kotoba: 'つぎ', answer: 'Selanjutnya', romaji: 'Tsugi' },
+          { kotoba: 'つめたい', answer: 'Dingin (untuk benda)', romaji: 'Tsumetai' },
+          { kotoba: 'て', answer: 'Tangan', romaji: 'Te' },
+          { kotoba: 'てがみ', answer: 'Surat', romaji: 'Tegami' },
+          { kotoba: 'でかける', answer: 'Pergi keluar', romaji: 'Dekakeru' },
+          { kotoba: 'でんき', answer: 'Listrik', romaji: 'Denki' },
+          { kotoba: 'でんしゃ', answer: 'Kereta listrik', romaji: 'Densha' },
+          { kotoba: 'どう', answer: 'Bagaimana', romaji: 'Dou' },
+          { kotoba: 'どうして', answer: 'Mengapa', romaji: 'Doushite' },
+          { kotoba: 'どうぞ', answer: 'Silakan', romaji: 'Douzo' },
+          { kotoba: 'どこ', answer: 'Di mana', romaji: 'Doko' },
+          { kotoba: 'どちら', answer: 'Mana (pilihan)', romaji: 'Dochira' },
+          { kotoba: 'どっち', answer: 'Yang mana', romaji: 'Docchi' },
+          { kotoba: 'どの', answer: 'Yang mana (di antara banyak)', romaji: 'Dono' },
+          { kotoba: 'と', answer: 'Dan', romaji: 'To' },
+          { kotoba: 'とけい', answer: 'Jam', romaji: 'Tokei' },
+          { kotoba: 'とても', answer: 'Sangat', romaji: 'Totemo' },
+          { kotoba: 'とり', answer: 'Burung', romaji: 'Tori' },
+          { kotoba: 'なか', answer: 'Dalam', romaji: 'Naka' },
+          { kotoba: 'ながい', answer: 'Panjang', romaji: 'Nagai' },
+          { kotoba: 'なまえ', answer: 'Nama', romaji: 'Namae' },
+          { kotoba: 'なに', answer: 'Apa', romaji: 'Nani' },
+          { kotoba: 'なん', answer: 'Apa (bentuk pendek)', romaji: 'Nan' },
+          { kotoba: 'なんじ', answer: 'Jam berapa', romaji: 'Nanji' },
+          { kotoba: 'なんにん', answer: 'Berapa orang', romaji: 'Nannin' },
+          { kotoba: 'に', answer: 'Ke, pada', romaji: 'Ni' },
+          { kotoba: 'にく', answer: 'Daging', romaji: 'Niku' },
+          { kotoba: 'にちようび', answer: 'Minggu', romaji: 'Nichiyoubi' },
+          { kotoba: 'にんぎょう', answer: 'Boneka', romaji: 'Ningyou' },
+          { kotoba: 'ぬる', answer: 'Mengoleskan', romaji: 'Nuru' },
+          { kotoba: 'ねこ', answer: 'Kucing', romaji: 'Neko' },
+          { kotoba: 'ねる', answer: 'Tidur', romaji: 'Neru' },
+          { kotoba: 'の', answer: 'Partikel milik', romaji: 'No' },
+          { kotoba: 'のる', answer: 'Naik', romaji: 'Noru' },
+          { kotoba: 'はい', answer: 'Ya', romaji: 'Hai' },
+          { kotoba: 'はじめる', answer: 'Memulai', romaji: 'Hajimeru' },
+          { kotoba: 'はし', answer: 'Jembatan', romaji: 'Hashi' },
+          { kotoba: 'はたらく', answer: 'Bekerja', romaji: 'Hataraku' },
+          { kotoba: 'はな', answer: 'Bunga', romaji: 'Hana' },
+          { kotoba: 'はなみ', answer: 'Melihat bunga', romaji: 'Hanami' },
+          { kotoba: 'はやい', answer: 'Cepat', romaji: 'Hayai' },
+          { kotoba: 'ばんごはん', answer: 'Makan malam', romaji: 'Bangohan' },
+          { kotoba: 'ばん', answer: 'Waktu malam', romaji: 'Ban' },
+          { kotoba: 'ひ', answer: 'Hari, Matahari', romaji: 'Hi' },
+          { kotoba: 'ひかり', answer: 'Cahaya', romaji: 'Hikari' },
+          { kotoba: 'ひこうき', answer: 'Pesawat', romaji: 'Hikouki' },
+          { kotoba: 'ひだり', answer: 'Kiri', romaji: 'Hidari' },
+          { kotoba: 'ひま', answer: 'Bebas, luang', romaji: 'Hima' },
+          { kotoba: 'ふく', answer: 'Pakaian', romaji: 'Fuku' },
+          { kotoba: 'ふるい', answer: 'Tua', romaji: 'Furui' },
+          { kotoba: 'ぶん', answer: 'Kalimat', romaji: 'Bun' },
+          { kotoba: 'べんきょう', answer: 'Belajar', romaji: 'Benkyou' },
+          { kotoba: 'ほか', answer: 'Lainnya', romaji: 'Hoka' },
+          { kotoba: 'ほしい', answer: 'Ingin', romaji: 'Hoshii' },
+          { kotoba: 'ほん', answer: 'Buku', romaji: 'Hon' },
+          { kotoba: 'まいあさ', answer: 'Setiap pagi', romaji: 'Maiasa' },
+          { kotoba: 'まいばん', answer: 'Setiap malam', romaji: 'Maiban' },
+          { kotoba: 'まつ', answer: 'Menunggu', romaji: 'Matsu' },
+          { kotoba: 'まち', answer: 'Kota', romaji: 'Machi' },
+          { kotoba: 'まる', answer: 'Lingkaran', romaji: 'Maru' },
+          { kotoba: 'みせ', answer: 'Toko', romaji: 'Mise' },
+          { kotoba: 'みず', answer: 'Air', romaji: 'Mizu' },
+          { kotoba: 'みち', answer: 'Jalan', romaji: 'Michi' },
+          { kotoba: 'みなさん', answer: 'Semua orang', romaji: 'Minasan' },
+          { kotoba: 'みなみ', answer: 'Selatan', romaji: 'Minami' },
+          { kotoba: 'むし', answer: 'Serangga', romaji: 'Mushi' },
+          { kotoba: 'むこう', answer: 'Di sana', romaji: 'Mukou' },
+          { kotoba: 'むずかしい', answer: 'Sulit', romaji: 'Muzukashii' },
+          { kotoba: 'め', answer: 'Mata', romaji: 'Me' },
+          { kotoba: 'めがね', answer: 'Kacamata', romaji: 'Megane' },
+          { kotoba: 'もつ', answer: 'Memiliki', romaji: 'Motsu' },
+          { kotoba: 'もんだい', answer: 'Masalah', romaji: 'Mondai' },
+          { kotoba: 'やすい', answer: 'Murah', romaji: 'Yasui' },
+          { kotoba: 'やま', answer: 'Gunung', romaji: 'Yama' },
+          { kotoba: 'やる', answer: 'Melakukan', romaji: 'Yaru' },
+          { kotoba: 'ゆうびんきょく', answer: 'Pos', romaji: 'Yuubinkyoku' },
+          { kotoba: 'ゆうべ', answer: 'Tadi malam', romaji: 'Yuube' },
+          { kotoba: 'よる', answer: 'Malam', romaji: 'Yoru' },
+          { kotoba: 'よっか', answer: 'Tanggal 4', romaji: 'Yokka' },
+          { kotoba: 'よる', answer: 'Malam', romaji: 'Yoru' },
+          { kotoba: 'らく', answer: 'Mudah', romaji: 'Raku' },
+          { kotoba: 'りょう', answer: 'Asrama', romaji: 'Ryou' },
+          { kotoba: 'りんご', answer: 'Apel', romaji: 'Ringo' },
+          { kotoba: 'るす', answer: 'Tidak di rumah', romaji: 'Rusu' },
+          { kotoba: 'れい', answer: 'Contoh', romaji: 'Rei' },
+          { kotoba: 'れんしゅう', answer: 'Latihan', romaji: 'Renshuu' },
+          { kotoba: 'わかる', answer: 'Mengerti', romaji: 'Wakaru' },
+          { kotoba: 'わすれる', answer: 'Lupa', romaji: 'Wasureru' },
+          { kotoba: 'わたし', answer: 'Saya', romaji: 'Watashi' },
+          { kotoba: 'わたくし', answer: 'Saya (formal)', romaji: 'Watakushi' },
+          { kotoba: 'わるい', answer: 'Buruk', romaji: 'Warui' },
+          { kotoba: 'あい', answer: 'Cinta', romaji: 'Ai' },
+          { kotoba: 'あお', answer: 'Biru', romaji: 'Ao' },
+          { kotoba: 'あか', answer: 'Merah', romaji: 'Aka' },
+          { kotoba: 'あき', answer: 'Musim gugur', romaji: 'Aki' },
+          { kotoba: 'あく', answer: 'Terbuka', romaji: 'Aku' },
+          { kotoba: 'あげる', answer: 'Memberikan', romaji: 'Ageru' },
+          { kotoba: 'あさ', answer: 'Pagi', romaji: 'Asa' },
+          { kotoba: 'あさごはん', answer: 'Sarapan', romaji: 'Asagohan' },
+          { kotoba: 'あし', answer: 'Kaki', romaji: 'Ashi' },
+          { kotoba: 'あたま', answer: 'Kepala', romaji: 'Atama' },
+          { kotoba: 'あたらしい', answer: 'Baru', romaji: 'Atarashii' },
+          { kotoba: 'あちら', answer: 'Di sana (lebih sopan)', romaji: 'Achira' },
+          { kotoba: 'あつい', answer: 'Panas', romaji: 'Atsui' },
+          { kotoba: 'あな', answer: 'Lubang', romaji: 'Ana' },
+          { kotoba: 'あに', answer: 'Kakak laki-laki', romaji: 'Ani' },
+          { kotoba: 'あね', answer: 'Kakak perempuan', romaji: 'Ane' },
+          { kotoba: 'あの', answer: 'Itu (di sana)', romaji: 'Ano' },
+          { kotoba: 'あぶない', answer: 'Berbahaya', romaji: 'Abunai' },
+          { kotoba: 'ありがとう', answer: 'Terima kasih', romaji: 'Arigatou' },
+          { kotoba: 'あれ', answer: 'Itu (objek jauh)', romaji: 'Are' },
+          { kotoba: 'ある', answer: 'Ada (untuk benda mati)', romaji: 'Aru' },
+          { kotoba: 'あるく', answer: 'Berjalan', romaji: 'Aruku' },
+          { kotoba: 'あれから', answer: 'Sejak itu', romaji: 'Are kara' },
+          { kotoba: 'いい', answer: 'Baik', romaji: 'Ii' },
+          { kotoba: 'いえ', answer: 'Rumah', romaji: 'Ie' },
+          { kotoba: 'いく', answer: 'Pergi', romaji: 'Iku' },
+          { kotoba: 'いけ', answer: 'Kolam', romaji: 'Ike' },
+          { kotoba: 'いしゃ', answer: 'Dokter', romaji: 'Isha' },
+          { kotoba: 'いす', answer: 'Kursi', romaji: 'Isu' },
+          { kotoba: 'いち', answer: 'Satu', romaji: 'Ichi' },
+          { kotoba: 'いちばん', answer: 'Yang terbaik', romaji: 'Ichiban' },
+          { kotoba: 'いつ', answer: 'Kapan', romaji: 'Itsu' },
+          { kotoba: 'いつか', answer: 'Suatu hari', romaji: 'Itsuka' },
+          { kotoba: 'いっしょ', answer: 'Bersama', romaji: 'Issho' },
+          { kotoba: 'いつも', answer: 'Selalu', romaji: 'Itsumo' },
+          { kotoba: 'いぬ', answer: 'Anjing', romaji: 'Inu' },
+          { kotoba: 'いもうと', answer: 'Adik perempuan', romaji: 'Imouto' },
+          { kotoba: 'いや', answer: 'Tidak suka', romaji: 'Iya' },
+          { kotoba: 'いらっしゃいませ', answer: 'Selamat datang', romaji: 'Irasshaimase' },
+          { kotoba: 'いろ', answer: 'Warna', romaji: 'Iro' },
+          { kotoba: 'うえ', answer: 'Atas', romaji: 'Ue' },
+          { kotoba: 'うけつけ', answer: 'Pendaftaran', romaji: 'Uketsuke' },
+          { kotoba: 'うしろ', answer: 'Belakang', romaji: 'Ushiro' },
+          { kotoba: 'うた', answer: 'Lagu', romaji: 'Uta' },
+          { kotoba: 'うたう', answer: 'Bernyanyi', romaji: 'Utau' },
+          { kotoba: 'うち', answer: 'Rumah saya', romaji: 'Uchi' },
+          { kotoba: 'うま', answer: 'Kuda', romaji: 'Uma' },
+          { kotoba: 'うみ', answer: 'Laut', romaji: 'Umi' },
+          { kotoba: 'うる', answer: 'Menjual', romaji: 'Uru' },
+          { kotoba: 'えいが', answer: 'Film', romaji: 'Eiga' },
+          { kotoba: 'えき', answer: 'Stasiun', romaji: 'Eki' },
+          { kotoba: 'えんぴつ', answer: 'Pensil', romaji: 'Empitsu' },
+          { kotoba: 'おいしい', answer: 'Enak', romaji: 'Oishii' },
+          { kotoba: 'おおきい', answer: 'Besar', romaji: 'Ookii' },
+          { kotoba: 'おおきな', answer: 'Besar', romaji: 'Ookina' },
+          { kotoba: 'おかあさん', answer: 'Ibu (sopan)', romaji: 'Okaasan' },
+          { kotoba: 'おかね', answer: 'Uang', romaji: 'Okane' },
+          { kotoba: 'おきる', answer: 'Bangun', romaji: 'Okiru' },
+          { kotoba: 'おく', answer: 'Meletakkan', romaji: 'Oku' },
+          { kotoba: 'おくさん', answer: 'Istri (orang lain)', romaji: 'Okusan' },
+          { kotoba: 'おさけ', answer: 'Sake (minuman keras)', romaji: 'Osake' },
+          { kotoba: 'おじいさん', answer: 'Kakek', romaji: 'Ojiisan' },
+          { kotoba: 'おじさん', answer: 'Paman', romaji: 'Ojisan' },
+          { kotoba: 'おそい', answer: 'Lambat', romaji: 'Osoi' },
+          { kotoba: 'おとうさん', answer: 'Ayah (sopan)', romaji: 'Otousan' },
+          { kotoba: 'おとこ', answer: 'Pria', romaji: 'Otoko' },
+          { kotoba: 'おとこのこ', answer: 'Anak laki-laki', romaji: 'Otokonoko' },
+          { kotoba: 'おとな', answer: 'Dewasa', romaji: 'Otona' },
+          { kotoba: 'おなじ', answer: 'Sama', romaji: 'Onaji' },
+          { kotoba: 'おねえさん', answer: 'Kakak perempuan (sopan)', romaji: 'Oneesan' },
+          { kotoba: 'おはよう', answer: 'Selamat pagi', romaji: 'Ohayou' },
+          { kotoba: 'おはようございます', answer: 'Selamat pagi (sopan)', romaji: 'Ohayou gozaimasu' },
+          { kotoba: 'おぼえる', answer: 'Mengingat', romaji: 'Oboeru' },
+          { kotoba: 'おまわりさん', answer: 'Polisi', romaji: 'Omawari san' },
+          { kotoba: 'おもい', answer: 'Berat', romaji: 'Omoi' },
+          { kotoba: 'おもう', answer: 'Berpikir', romaji: 'Omou' },
+          { kotoba: 'およぐ', answer: 'Berenang', romaji: 'Oyogu' },
+          { kotoba: 'おりる', answer: 'Turun', romaji: 'Oriru' },
+          { kotoba: 'おわる', answer: 'Selesai', romaji: 'Owaru' },
+          { kotoba: 'おんがく', answer: 'Musik', romaji: 'Ongaku' },
+          { kotoba: 'おんせん', answer: 'Pemandian air panas', romaji: 'Onsen' }
+        ];
+        const wrongAnswers = [
+          'Cinta', 'Biru', 'Merah', 'Musim gugur', 'Terbuka', 'Memberikan', 'Pagi', 'Sarapan', 'Kaki', 'Kepala', 
+          'Baru', 'Di sana (lebih sopan)', 'Panas', 'Lubang', 'Kakak laki-laki', 'Kakak perempuan', 'Itu (di sana)', 
+          'Berbahaya', 'Terima kasih', 'Itu (objek jauh)', 'Ada (untuk benda mati)', 'Berjalan', 'Sejak itu', 'Baik', 
+          'Rumah', 'Pergi', 'Kolam', 'Dokter', 'Kursi', 'Satu', 'Yang terbaik', 'Kapan', 'Suatu hari', 'Bersama', 
+          'Selalu', 'Anjing', 'Adik perempuan', 'Tidak suka', 'Selamat datang', 'Warna', 'Atas', 'Pendaftaran', 'Belakang', 
+          'Lagu', 'Bernyanyi', 'Rumah saya', 'Kuda', 'Laut', 'Menjual', 'Film', 'Stasiun', 'Pensil', 'Enak', 'Besar', 
+          'Besar', 'Ibu (sopan)', 'Uang', 'Bangun', 'Meletakkan', 'Istri (orang lain)', 'Sake (minuman keras)', 'Kakek', 
+          'Paman', 'Lambat', 'Ayah (sopan)', 'Pria', 'Anak laki-laki', 'Dewasa', 'Sama', 'Kakak perempuan (sopan)', 
+          'Selamat pagi', 'Selamat pagi (sopan)', 'Mengingat', 'Polisi', 'Berat', 'Berpikir', 'Berenang', 'Turun', 'Selesai', 
+          'Musik', 'Pemandian air panas', 'Apel', 'Makanan', 'Membaca', 'Ibu', 'Kampus', 'Bulan', 'Desember', 'Karakter', 
+          'Tidur', 'Bicara', 'Waktu', 'Buku', 'Warna merah', 'Jalan', 'Perusahaan', 'Kamar', 'Hutan', 'Universitas', 'Salju', 
+          'Matahari', 'Memasak', 'Listrik', 'Komputer', 'Makanan', 'Gurita', 'Cermin', 'Burung', 'Beras', 'Besi', 'Baju', 
+          'Bus', 'Terlalu', 'Tunggu', 'Cinta', 'Teman', 'Pelajaran', 'Makanan penutup', 'Kerja', 'Berbicara', 'Sarapan', 
+          'Sekolah', 'Ikan', 'Kapal', 'Hari ini', 'Lari', 'Tanya', 'Apakah', 'Ketinggian', 'Dunia', 'Pukul', 'Duduk', 
+          'Tanggal', 'Sungai', 'Lebar', 'Pertemuan', 'Sampai', 'Jalanan', 'Terbaik', 'Keluarga', 'Sekitar', 'Di depan', 
+          'Rumah tangga', 'Kemarin', 'Besok', 'Minggu', 'Orang tua', 'Pembicaraan', 'Perasaan', 'Laki-laki', 'Perempuan', 
+          'Cahaya', 'Berkendara', 'Mereka', 'Sekarang', 'Pukul berapa', 'Makan malam', 'Jalan kaki', 'Bekerja', 'Matematika', 
+          'Pagi-pagi', 'Tenggorokan', 'Lama', 'Lantai', 'Satu minggu', 'Satu bulan', 'Satu tahun', 'Kecil', 'Cinta kasih', 
+          'Bergabung', 'Mempunyai', 'Tinggal', 'Memulai', 'Menunggu', 'Lantai kedua', 'Dua hari', 'Enam bulan', 'Sama sekali', 
+          'Buku pelajaran', 'Membeli', 'Kiri', 'Kanan', 'Tidak ada', 'Lebih', 'Semuanya', 'Tanya jawab', 'Lebih dari itu'
+        ];
+             let currentQuestionIndex = 0;
+             let lives = 2;
+             let correctAnswersCount = 0;
+             let totalQuestions = kotobaList.length;
+     
+             // Fungsi untuk mengacak pilihan
+             function shuffle(arr) {
+               for (let i = arr.length - 1; i > 0; i--) {
+                 const j = Math.floor(Math.random() * (i + 1));
+                 [arr[i], arr[j]] = [arr[j], arr[i]];
+               }
+               return arr;
+             }
+     
+             // Fungsi untuk menampilkan soal
+             function displayQuestion() {
+               const question = kotobaList[currentQuestionIndex];
+               document.getElementById('Kotoba').textContent = question.kotoba;
+               const choices = generateChoices(question);
+     
+               const choicesContainer = document.getElementById('choices');
+               choicesContainer.innerHTML = '';
+     
+               choices.forEach((choice) => {
+                 const button = document.createElement('button');
+                 button.classList.add('choice');
+                 button.textContent = choice;
+                 button.onclick = () => checkAnswer(choice, question);
+                 choicesContainer.appendChild(button);
+               });
+             }
+     
+             // Fungsi untuk generate pilihan jawaban
+             function generateChoices(question) {
+               const correctAnswer = question.answer;
+               let randomWrongAnswers = [];
+     
+               while (randomWrongAnswers.length < 3) {
+                 const wrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+                 if (!randomWrongAnswers.includes(wrongAnswer) && wrongAnswer !== correctAnswer) {
+                   randomWrongAnswers.push(wrongAnswer);
+                 }
+               }
+     
+               const choices = [...randomWrongAnswers, correctAnswer];
+               return shuffle(choices);
+             }
+     
+             // Fungsi untuk mengecek jawaban
+             function checkAnswer(selectedAnswer, question) {
+               if (selectedAnswer === question.answer) {
+                 correctAudio.play();
+            document.getElementById('result').innerHTML = `✅ Yeeay Benar...🥳  <br>${question.romaji}<br>`;
+              correctAnswersCount++;
+            } else {
+              wrongAudio.play();
+              lives--;
+              document.getElementById('result').innerHTML = '❌ Uupps Salah...😔';
+              document.getElementById('lives').textContent = '❤️'.repeat(lives);
+            }
+  
+            if (lives <= 0) {
+              nextQuestion();
+            } else {
+              document.getElementById('next-btn').style.display = 'block';
+            }
+          }
+  
+          // Fungsi untuk soal berikutnya
+          function nextQuestion() {
+            lives = 2;
+            document.getElementById('lives').textContent = '❤️❤️';
+  
+            if (currentQuestionIndex < kotobaList.length - 1) {
+              currentQuestionIndex++;
+              displayQuestion();
+              document.getElementById('result').textContent = '';
+              document.getElementById('next-btn').style.display = 'none';
+            } else {
+              showFinalResult();
+            }
+          }
+  
+          // Fungsi untuk menampilkan hasil akhir
+          function showFinalResult() {
+            const score = Math.floor((correctAnswersCount / totalQuestions) * 100);
+            const resultText = `Kuis selesai! 🎉<br> Benar:  dari  ${totalQuestions} soal. <br> Skor: ${score}%`;
+            const passOrFail = score >= 80 ? '🎓 Selamat Anda Lulus!' : '❌ Maaf Anda Belum Lulus, Belajar Lagi Ya!';
+            document.getElementById('result').innerHTML = resultText + `<br>` + passOrFail;
+  
+            document.getElementById('next-btn').textContent = 'Belajar Ulang';
+            document.getElementById('next-btn').onclick = restartQuiz;
+            document.getElementById('next-btn').style.display = 'block';
+          }
+  
+          // Fungsi untuk merestart kuis
+          function restartQuiz() {
+            currentQuestionIndex = 0;
+            lives = 2;
+            correctAnswersCount = 0;
+            document.getElementById('lives').textContent = '❤️❤️';
+            document.getElementById('next-btn').textContent = 'Lanjut';
+            document.getElementById('next-btn').onclick = nextQuestion;
+            displayQuestion();
+            document.getElementById('result').textContent = '';
+            document.getElementById('next-btn').style.display = 'none';
+          }
+  
+          document.addEventListener("DOMContentLoaded", () => {
+            displayQuestion();
+            document.getElementById('next-btn').onclick = nextQuestion;
+          });
+        </script>
+    </body>
+  </html>
