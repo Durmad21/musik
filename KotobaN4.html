@@ -10,6 +10,7 @@
             margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
@@ -75,6 +76,24 @@
             50% { transform: translateY(-30px) rotate(180deg); }
             100% { transform: translateY(0) rotate(360deg); }
         }
+
+        /* Tombol kembali */
+        .back-btn {
+            position: absolute;
+            bottom: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -86,5 +105,7 @@
     <div class="circle"></div>
     <div class="circle"></div>
     <div class="circle"></div>
+
+    <!-- Tombol kembali -->
+    <button class="back-btn" onclick="window.location.href='https://adewij.github.io/musik/index.html';">Kembali</button>
 </body>
-</html>
