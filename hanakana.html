@@ -1,4 +1,5 @@
 
+
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -18,31 +19,18 @@
             text-align: center;
         }
 
-            /* Desain Menu */
-    .menu {
-      display: flex;
-      justify-content: center; /* Membuat tombol sejajar di tengah horizontal */
-      align-items: center;
-      flex-direction: row; /* Menempatkan tombol sejajar horizontal */
-      gap: 20px; /* Ruang antar tombol */
-      background: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Tombol Hiragana & Katakana */
-    #hiragana-btn, #katakana-btn {
-      background: #28a745; /* Warna hijau */
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.2em;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 150px;
-    }
+        /* Desain card dan layar dengan tampilan modern */
+        .menu, .learning-screen, .quiz-container, .end-screen {
+            display: none;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 450px;
+            transition: all 0.3s ease;
+        }
 
         .menu.active, .learning-screen.active, .quiz-container.active, .end-screen.active {
             display: block;
@@ -57,32 +45,20 @@
             display: block;
         }
 
-
-        /* Gaya tombol */
-    .back-btn {
-      padding: 10px 20px; /* Ukuran padding untuk kenyamanan klik */
-      font-size: 16px; /* Ukuran teks */
-      background-color: #007bff; /* Warna biru */
-      color: white; /* Warna teks putih */
-      border: none; /* Menghilangkan border */
-      border-radius: 5px; /* Sudut tombol membulat */
-      cursor: pointer; /* Tanda bahwa bisa diklik */
-      transition: background-color 0.3s ease; /* Efek transisi warna */
-    }
-
-    /* Efek hover */
-    .back-btn:hover {
-      background-color: #0056b3; /* Warna lebih gelap saat mouse berada di atas tombol */
-    }
-
-    /* Tata letak */
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh; /* Memastikan tombol berada di tengah halaman */
-      margin: 0;
-    }
+/* Tombol Mode (Hiragana dan Katakana) */
+       .button {
+           background-color: #28a745; /* Warna hijau */
+           color: white;
+           border: none;
+           padding: 10px 40px;  /* Ukuran padding lebih besar untuk tombol */
+           margin: 10px;
+           font-size: 1.5em;  /* Ukuran font lebih besar untuk tombol */
+           border-radius: 10px;  /* Sudut tombol membulat */
+           cursor: pointer;
+           transition: all 0.3s ease;
+           width: 50%; /* Agar tombol memanfaatkan lebar penuh */
+           text-align: center; /* Pastikan teks ada di tengah */
+       }
        
        .button:hover {
            background-color: #218838; /* Gelap sedikit saat hover */
@@ -149,12 +125,27 @@
             box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3); /* Efek bayangan hijau lebih ringan */
             transition: all 0.3s ease;
         }
-               
+        
         .correct:hover {
             background-color: #218838; /* Warna hijau lebih gelap saat hover */
             border-color: #218838;
             box-shadow: 0 6px 12px rgba(40, 167, 69, 0.5); /* Bayangan lebih besar saat hover */
         }
+        
+         .back-btn {
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    color: white;
+                    background-color: #007bff;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                }
+        
+                .back-btn:hover {
+                    background-color: #0056b3;
+                }
         
         .incorrect {
             background-color: #dc3545; /* Merah untuk salah */
@@ -220,28 +211,7 @@
             background-color: #1d6fa5;  /* Warna biru lebih gelap saat tombol ditekan */
         }
         
-/* Tombol Pilihan Mode (Hiragana & Katakana) */
-        #hiragana-btn, #katakana-btn {
-            background: #28a745; /* Warna hijau untuk tombol */
-            color: white;
-            border: none;
-            padding: 20px 40px; /* Padding lebih besar agar tombol lebih besar */
-            margin: 10px;
-            font-size: 1.5em; /* Ukuran font lebih besar */
-            border-radius: 10px; /* Sudut membulat */
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        #hiragana-btn:hover, #katakana-btn:hover {
-            background: #218838; /* Hijau lebih gelap saat hover */
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
-        }
-        
-        #hiragana-btn:active, #katakana-btn:active {
-            background: #1e7e34; /* Hijau lebih gelap saat ditekan */
-        }
-        
+/* 
         /*
         
 /* /* Tombol Pilihan Jawaban */
@@ -273,7 +243,7 @@
             background: #007bff; /* Warna biru untuk tombol Lanjutkan */
             color: white; /* Teks putih */
             border: none;
-            padding: 15px 30px; /* Padding lebih besar untuk tombol Lanjutkan */
+            padding: 5px 10px; /* Padding lebih besar untuk tombol Lanjutkan */
             margin: 10px;
             font-size: 1.2em; /* Ukuran font tetap besar */
             border-radius: 10px; /* Sudut membulat */
@@ -346,6 +316,8 @@
     <div class="menu active" id="menu">
         <h1>Pilih Mode</h1>
         <button class="back-btn" onclick="window.location.href='https://adewij.github.io/musik/index.html';">Kembali</button>
+        </body>
+        </html>
         <button class="button" onclick="startLearning('hiragana', 'A')">Hiragana </button>
         <button class="button" onclick="startLearning('katakana', 'A')">Katakana </button>
     </div>
