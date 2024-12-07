@@ -523,9 +523,9 @@
             } else if (mode === 'katakana' && set === 'WA') {
                 currentData = katakanaWA;
                 currentSet = 'WA';
-            if (currentSet === 'WA') {
-                 showEndScreen();
-             }
+             if (currentSet === 'WA' && questionIndex === currentData.length && currentIndex >= currentData.length) {
+                showEndScreen();
+            }
             }
         
             
@@ -764,6 +764,10 @@
         }
         
         function showEndScreen() {
+             if (currentIndex < currentData.length || questionIndex < currentData.length) {
+                    console.error("Belum semua soal selesai, tidak dapat menampilkan skor.");
+                
+                }
              // Sembunyikan tombol pilihan Hiragana/Katakana
              document.getElementById("menu").classList.remove("active");
              
