@@ -150,7 +150,7 @@
             <p class="question" id="question"> <span id="kanji" class="kanji"></span></p>
             <div class="choices" id="choices"></div>
             <div class="result" id="result"></div>
-            <button class="back-btn" onclick="window.location.href='https://durmad21.github.io/musik/JFTA2.html';">Kembali</button>
+            <button class="back-btn" onclick="window.location.href='https://adewij.github.io/musik/index.html';">Kembali</button>
             <button class="next-btn" id="next-btn" style="display: none;">Lanjut</button>
       
             <audio id="background-audio" loop>
@@ -166,14 +166,10 @@
           </div>
 
       <script>
-        const correctAudio = new Audio('https://adewij.github.io/Adewij/correctt.mp3');
-        const wrongAudio = new Audio('https://adewij.github.io/Adewij/wrongh.mp3');
+        const correctAudio = new Audio('https://adewij.github.io/Adewij/correct.mp3');
+        const wrongAudio = new Audio('https://adewij.github.io/Adewij/wrong.mp3');
         const backgroundAudio = document.getElementById('background-audio');
-              
-        correctAudio.muted = true;
-        wrongAudio.muted = true;
-        backgroundAudio.muted = true
-        
+      
         document.body.addEventListener('click', () => {
           if (backgroundAudio.paused) {
             backgroundAudio.play().catch((error) => { console.error(error); });
@@ -217,9 +213,9 @@
                     { kanji: '八', answer: 'Delapan ', romaji: 'はち' },
                     { kanji: '九', answer: 'Sembilan ', romaji: 'きゅう' },
                     { kanji: '十', answer: 'Sepuluh ', romaji: 'じゅう' },
-                    { kanji: '年', answer: 'tahun ', romaji: 'ねん' },
-                    { kanji: '月', answer: 'bulan ', romaji: 'がつ' },
-                    { kanji: '日', answer: 'tanggal ', romaji: 'にち' },
+                    { kanji: '～年', answer: '~ tahun ', romaji: '～ねん' },
+                    { kanji: '～月', answer: '~ bulan ', romaji: '～がつ' },
+                    { kanji: '～日', answer: '~ tanggal ', romaji: '～にち' },
                     { kanji: '東', answer: 'Timur ', romaji: 'ひがし' },
                     { kanji: '西', answer: 'Barat ', romaji: 'にし' },
                     { kanji: '南', answer: 'Selatan ', romaji: 'みなみ' },
@@ -232,7 +228,7 @@
                     { kanji: '買います', answer: 'Membeli ', romaji: 'かいます' },
                     { kanji: '買い物', answer: 'Belanja ', romaji: 'かいもの' },
                     { kanji: 'お金', answer: 'Uang ', romaji: 'おかね' },
-                    { kanji: '円', answer: '～Yen ', romaji: '～えん' },
+                    { kanji: '53', answer: '～えん ', romaji: '～円' },
                     { kanji: '百', answer: '100 ', romaji: 'ひゃく' },
                     { kanji: '千', answer: '1000 ', romaji: 'せん' },
                     { kanji: '万', answer: '10000 ', romaji: 'まん' },
@@ -448,7 +444,7 @@
                     { kanji: '帰ります', answer: 'Pulang ', romaji: 'かえります' },
                     { kanji: '予約します', answer: 'Memesan ', romaji: 'よやくします' },
                     { kanji: '運転します', answer: 'Menyetir ', romaji: 'うんてんします' },
-                    { kanji: '中', answer: 'Tengah/dalam', romaji: 'ちゅう/なか' },
+                    { kanji: '～中', answer: 'Sedang/dalam ~ ', romaji: '～ちゅう' },
                     { kanji: '旅行中', answer: 'Sedang wisata ', romaji: 'りょこうちゅう' },
                     { kanji: '観光地', answer: 'Tempat wisata ', romaji: 'かんこうち' },
                     { kanji: '女性', answer: 'Wanita ', romaji: 'じょせい' },
@@ -459,6 +455,7 @@
                     { kanji: '277', answer: 'むりょう ', romaji: '無料' },
                     { kanji: '明るい', answer: 'Terang ', romaji: 'あかるい' },
                     { kanji: '便利', answer: 'Praktis ', romaji: 'べんり' },
+                    { kanji: '～中', answer: 'Dalam~ ', romaji: '～じゅう' },
                     { kanji: '一年中', answer: 'Dalam satu tahun ', romaji: 'いちねんじゅう' },
                     { kanji: '受付', answer: 'Penerima tamu ', romaji: 'うけつけ' },
                     { kanji: '広場', answer: 'Lapangan ', romaji: 'ひろば' },
@@ -489,7 +486,7 @@
                     { kanji: '成長', answer: 'Pertumbuhan, perkembangan ', romaji: 'せいちょう' },
                     { kanji: '長生き', answer: 'Umur panjang, hidup lama ', romaji: 'ながいき' },
                     { kanji: '願い事', answer: 'Keinginan, kemauan, harapan ', romaji: 'ねがいこと' },
-                    { kanji: '合格', answer: 'Lulus (ujian/test) ', romaji: 'ごうかく' },
+                    { kanji: '合格', answer: 'Lulus ', romaji: 'ごうかく' },
                     { kanji: '試験', answer: 'Ujian ', romaji: 'しけん' },
                     { kanji: '大人', answer: 'Orang Dewasa ', romaji: 'おとな' },
                     { kanji: '～式（成人式）', answer: 'Upacara ~(upacara kedewasaan) ', romaji: '～しき（せいじんしき）' },
@@ -504,7 +501,6 @@
                     { kanji: '動きます', answer: 'Bergerak ', romaji: 'うごきます' },
                     { kanji: '考えます', answer: 'Berfikir ', romaji: 'かんがえます' },
                     { kanji: '音', answer: 'Suara ', romaji: 'おと' },
-                    { kanji: '卒業', answer: 'lulus(sekolah)', romaji:'そつぎょう' },
                     { kanji: '出ます', answer: 'Keluar ', romaji: 'でます' },
                     { kanji: '機能', answer: 'Fungsi ', romaji: 'きのう' },
                     { kanji: '省エネ', answer: 'Penghematan energy ', romaji: 'しょうエネ' },
@@ -568,7 +564,7 @@
                     { kanji: '夫', answer: 'Suami ( sendiri ) ', romaji: 'おっと' },
                     { kanji: '妻', answer: 'Istri ( sendiri ) ', romaji: 'つま' },
                     { kanji: '両親', answer: 'Orang tua ', romaji: 'りょうしん' },
-                    { kanji: '不便', answer: 'dak nyaman / tidak praktis ', romaji: 'ふべん' },
+                    { kanji: '389', answer: 'ふべん ', romaji: '不便' },
                     { kanji: '選びます', answer: 'Memilih ', romaji: 'えらびます' },
                     { kanji: '寝ます', answer: 'Tidur ', romaji: 'ねます' },
                     { kanji: 'サッカー場', answer: 'Lapangan sepak bola ', romaji: 'サッカーじょう' },
@@ -624,7 +620,7 @@
                     { kanji: '中級', answer: 'Kelas menengah ', romaji: 'ちゅうきゅう' },
                     { kanji: '上級', answer: 'Kelas atas ', romaji: 'じょうきゅう' },
                     { kanji: '相手', answer: 'Pasangan, lawan ', romaji: 'あいて' },
-                    { kanji: '気持ち', answer: 'perasaan ', romaji: 'きもち' },
+                    { kanji: '445', answer: 'きもち ', romaji: '気持ち' },
                     { kanji: '恋人', answer: 'Pacar ', romaji: 'こいびと' },
                     { kanji: '出会い', answer: 'Pertemuan ', romaji: 'であい' },
                     { kanji: '最近', answer: 'Akhir-akhir ini ', romaji: 'さいきん' },
@@ -674,11 +670,11 @@
                     { kanji: 'もう一度', answer: 'Sekali lagi ', romaji: 'もういちど' },
                     { kanji: '例', answer: 'Contoh ', romaji: 'れい' }, 
                     { kanji: '練習', answer: 'latihan ', romaji: 'れんしゅう' },
-                  
+                    { kanji: '496', answer: '498 ', romaji: '497' },
                  
         ];
       
-  /*      const wrongAnswers = [
+        const wrongAnswers = [
           // 100 kata sebelumnya
           'さかな', 'にく', 'ふく', 'じてんしゃ', 'くるま', 'いえ', 'つき', 'たいよう', 'ひ', 'ひる',
           'よる', 'にちようび', 'げつようび', 'かようび', 'すいようび', 'もくようび', 'きんようび', 'どようび', 'とし', 'つき',
@@ -716,7 +712,8 @@
           'ふつう', 'いそがしい', 'ひま', 'おおきい', 'ちいさい', 'たかい', 'ひくい', 'おおい', 'すくない', 'ふるい',
           'あたらしい', 'つよい', 'よわい', 'ながい', 'みじかい', 'ひろい', 'せまい', 'はやい', 'おそい', 'あかるい'
         ];
-      */
+      
+        
         let currentQuestionIndex = 0;
         let correctAnswersCount = 0;
         let totalQuestions = kanjiList.length;
@@ -802,13 +799,13 @@
         
             return shuffle([...wrongs, correct]);
         }
-    
-        function shuffle(array) {
-          for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-          }
-          return array;
+        
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
         }
         
         function displayQuestion() {
