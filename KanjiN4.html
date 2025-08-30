@@ -815,7 +815,7 @@
           function checkAnswer(selectedAnswer, question) {
             if (selectedAnswer === question.answer) {
               correctAudio.play();
-              document.getElementById('result').innerHTML = `✅ Yeeay Benar...🥳<br> `;
+              document.getElementById('result').innerHTML = `✅ Yeeay Benar...🥳 <br> ${question.romaji}`;
               correctAnswersCount++;
             } else {
               wrongAudio.play();
