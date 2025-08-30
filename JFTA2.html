@@ -765,39 +765,43 @@
         
         // ==================== Kode kuis ====================
         function generateChoices(question) {
-            const correct = question.romaji; // jawaban hiragana
-            let wrongs = [];
-        
-            while (wrongs.length < 3) {
-                let wrong = correct.split(''); // pecah ke array
-        
-                // ubah 1 huruf random di wrong
-                const idx = Math.floor(Math.random() * wrong.length);
-                const vowels = ['あ','い','う','え','お'];
-        
-                // kalau hurufnya vokal, ganti vokal lain
-                if (vowels.includes(wrong[idx])) {
-                    let newV = vowels[Math.floor(Math.random() * vowels.length)];
-                    if (newV === wrong[idx]) newV = vowels[(vowels.indexOf(wrong[idx])+1)%vowels.length];
-                    wrong[idx] = newV;
-                } else {
-                    // kalau bukan vokal, swap dengan huruf tetangga
-                    const shift = Math.random() < 0.5 ? -1 : 1;
-                    const newIdx = idx + shift;
-                    if (newIdx >= 0 && newIdx < wrong.length) {
-                        [wrong[idx], wrong[newIdx]] = [wrong[newIdx], wrong[idx]];
-                    }
-                }
-        
-                wrong = wrong.join('');
-        
-                if (wrong !== correct && !wrongs.includes(wrong)) {
-                    wrongs.push(wrong);
-                }
+    const correct = question.romaji;
+    let wrongs = [];
+    const maxAttempts = 20; // batasi percobaan
+    let attempts = 0;
+
+    while (wrongs.length < 3 && attempts < maxAttempts) {
+        attempts++;
+        let wrong = correct.split('');
+        const idx = Math.floor(Math.random() * wrong.length);
+        const vowels = ['あ','い','う','え','お'];
+
+        if (vowels.includes(wrong[idx])) {
+            let newV = vowels[Math.floor(Math.random() * vowels.length)];
+            if (newV === wrong[idx]) newV = vowels[(vowels.indexOf(wrong[idx])+1)%vowels.length];
+            wrong[idx] = newV;
+        } else {
+            const shift = Math.random() < 0.5 ? -1 : 1;
+            const newIdx = idx + shift;
+            if (newIdx >= 0 && newIdx < wrong.length) {
+                [wrong[idx], wrong[newIdx]] = [wrong[newIdx], wrong[idx]];
             }
-        
-            return shuffle([...wrongs, correct]);
         }
+
+        wrong = wrong.join('');
+        if (wrong !== correct && !wrongs.includes(wrong)) {
+            wrongs.push(wrong);
+        }
+    }
+
+    // Jika masih kurang, ambil jawaban random dari pool
+    while (wrongs.length < 3) {
+        const randomWrong = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+        if (randomWrong !== correct && !wrongs.includes(randomWrong)) wrongs.push(randomWrong);
+    }
+
+    return shuffle([...wrongs, correct]);
+}
     
         function shuffle(array) {
           for (let i = array.length - 1; i > 0; i--) {
