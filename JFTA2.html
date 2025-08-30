@@ -851,43 +851,55 @@
         }
       
         function showFinalResult() {
-          const score = Math.floor((correctAnswersCount / currentQuestionCount) * 100);
-        
-          let resultText = "";
-          if (score >= 70) {
-            resultText = `🎉 Selamat! Kamu lulus sesi ${currentSession}! 🏆<br>
-              Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
-              Skor: <span style="color:lime; font-size:24px; font-weight:bold;">${score}%</span>`;
-          } else {
-            resultText = `😢 Sayang sekali, sesi ${currentSession} belum lulus.<br>
-              Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
-              Skor: <span style="color:red; font-size:24px; font-weight:bold;">${score}%</span><br>
-              Coba lagi ya! 💪`;
-          }
-        
-          // Sembunyikan soal
-          document.getElementById('question-container').style.display = 'none';
-        
-          // Tampilkan hasil
-          document.getElementById('final-result-container').style.display = 'block';
-          document.getElementById('final-result-text').innerHTML = resultText;
-        
-          // Tombol ulang
-          const retryBtn = document.getElementById('retry-btn');
-          retryBtn.textContent = score >= 70 ? "Lanjut Sesi Berikutnya" : "Belajar Ulang";
-          retryBtn.onclick = () => {
-            document.getElementById('final-result-container').style.display = 'none';
-            restartQuiz();
-          };
-        
-          // Kalau skor >= 70%, unlock sesi berikutnya
-          if (score >= 70 && currentSession < totalSessions) {
-            const nextButton = sessionsContainer.children[currentSession]; // index mulai 0
-            nextButton.disabled = false;
-            nextButton.style.backgroundColor = "#008CBA";
-            nextButton.style.cursor = "pointer";
-          }
-        }
+        const score = Math.floor((correctAnswersCount / currentQuestionCount) * 100);
+
+        let resultText = "";
+
+  if (score === 100) {
+    // Efek spesial untuk Dina
+    resultText = `
+      💖 Woooow Dinaaa!!! 💖<br>
+      Kamu PERFECT banget!! 🎉<br>
+      Semua soal benar 100%! 🏆<br><br>
+      Aku bangga banget sama kamu 😘<br>
+      Terus semangat ya sayangku, Dina 💕
+    `;
+  } else if (score >= 70) {
+    // Lulus normal
+    resultText = `🎉 Selamat! Kamu lulus sesi ${currentSession}! 🏆<br>
+      Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
+      Skor: <span style="color:lime; font-size:24px; font-weight:bold;">${score}%</span>`;
+  } else {
+    // Belum lulus
+    resultText = `😢 Sayang sekali, sesi ${currentSession} belum lulus.<br>
+      Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
+      Skor: <span style="color:red; font-size:24px; font-weight:bold;">${score}%</span><br>
+      Coba lagi ya! 💪`;
+  }
+
+  // Sembunyikan soal
+  document.getElementById('question-container').style.display = 'none';
+
+  // Tampilkan hasil
+  document.getElementById('final-result-container').style.display = 'block';
+  document.getElementById('final-result-text').innerHTML = resultText;
+
+  // Tombol ulang / lanjut
+  const retryBtn = document.getElementById('retry-btn');
+  retryBtn.textContent = score >= 70 ? "Lanjut Sesi Berikutnya" : "Belajar Ulang";
+  retryBtn.onclick = () => {
+    document.getElementById('final-result-container').style.display = 'none';
+    restartQuiz();
+  };
+
+  // Kalau skor >= 70%, unlock sesi berikutnya
+  if (score >= 70 && currentSession < totalSessions) {
+    const nextButton = sessionsContainer.children[currentSession]; // index mulai 0
+    nextButton.disabled = false;
+    nextButton.style.backgroundColor = "#008CBA";
+    nextButton.style.cursor = "pointer";
+   }  
+}
       
         function restartQuiz() {
           currentQuestionIndex = sessionStartIndex; // kembali ke awal sesi yang dipilih
