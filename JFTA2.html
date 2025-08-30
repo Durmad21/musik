@@ -678,7 +678,7 @@
                  
         ];
       
-        const wrongAnswers = [
+  /*      const wrongAnswers = [
           // 100 kata sebelumnya
           'さかな', 'にく', 'ふく', 'じてんしゃ', 'くるま', 'いえ', 'つき', 'たいよう', 'ひ', 'ひる',
           'よる', 'にちようび', 'げつようび', 'かようび', 'すいようび', 'もくようび', 'きんようび', 'どようび', 'とし', 'つき',
@@ -716,7 +716,7 @@
           'ふつう', 'いそがしい', 'ひま', 'おおきい', 'ちいさい', 'たかい', 'ひくい', 'おおい', 'すくない', 'ふるい',
           'あたらしい', 'つよい', 'よわい', 'ながい', 'みじかい', 'ひろい', 'せまい', 'はやい', 'おそい', 'あかるい'
         ];
-      
+      */
         let currentQuestionIndex = 0;
         let correctAnswersCount = 0;
         let totalQuestions = kanjiList.length;
@@ -765,26 +765,46 @@
         
         // ==================== Kode kuis ====================
         function generateChoices(question) {
-            const correctAnswerKana = question.romaji; // huruf kana
-            let randomWrongKana = [];
+            const correct = question.romaji; // jawaban hiragana
+            let wrongs = [];
         
-            while (randomWrongKana.length < 3) {
-                const wrong = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
-                if (!randomWrongKana.includes(wrong) && wrong !== correctAnswerKana) {
-                    randomWrongKana.push(wrong);
+            while (wrongs.length < 3) {
+                let wrong = correct.split(''); // pecah ke array
+        
+                // ubah 1 huruf random di wrong
+                const idx = Math.floor(Math.random() * wrong.length);
+                const vowels = ['あ','い','う','え','お'];
+        
+                // kalau hurufnya vokal, ganti vokal lain
+                if (vowels.includes(wrong[idx])) {
+                    let newV = vowels[Math.floor(Math.random() * vowels.length)];
+                    if (newV === wrong[idx]) newV = vowels[(vowels.indexOf(wrong[idx])+1)%vowels.length];
+                    wrong[idx] = newV;
+                } else {
+                    // kalau bukan vokal, swap dengan huruf tetangga
+                    const shift = Math.random() < 0.5 ? -1 : 1;
+                    const newIdx = idx + shift;
+                    if (newIdx >= 0 && newIdx < wrong.length) {
+                        [wrong[idx], wrong[newIdx]] = [wrong[newIdx], wrong[idx]];
+                    }
+                }
+        
+                wrong = wrong.join('');
+        
+                if (wrong !== correct && !wrongs.includes(wrong)) {
+                    wrongs.push(wrong);
                 }
             }
         
-            const choices = [...randomWrongKana, correctAnswerKana];
-            return shuffle(choices);
+            return shuffle([...wrongs, correct]);
         }
-        
-        function shuffle(arr) {
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
+    
+        function shuffle(array) {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array;
         }
         
         function displayQuestion() {
