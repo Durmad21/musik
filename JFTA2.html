@@ -169,7 +169,12 @@
         const correctAudio = new Audio('https://adewij.github.io/Adewij/correct.mp3');
         const wrongAudio = new Audio('https://adewij.github.io/Adewij/wrong.mp3');
         const backgroundAudio = document.getElementById('background-audio');
-      
+
+  // Mute semua audio
+        correctAudio.muted = true;
+        wrongAudio.muted = true;
+        backgroundAudio.muted = true;
+              
         document.body.addEventListener('click', () => {
           if (backgroundAudio.paused) {
             backgroundAudio.play().catch((error) => { console.error(error); });
