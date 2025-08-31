@@ -997,35 +997,33 @@
         let sessionStartIndex = 0;
         
         for (let i = 1; i <= totalSessions; i++) {
-            const btn = document.createElement('button');
-            btn.textContent = `Sesi `;
-            btn.style.padding = "15px 20px";
-            btn.style.margin = "10px";
-            btn.style.borderRadius = "15px";
-            btn.style.cursor = i === 1 ? "pointer" : "not-allowed";
-            btn.style.backgroundColor = i === 1 ? "#008CBA" : "gray";
-            btn.style.color = "white";
-            btn.disabled = i !== 1;
-        
-            btn.onclick = () => {
-                sessionStartIndex = (i - 1) * sessionSize;
-                currentSession = i;           // tandai sesi yang aktif
-        
-                // ambil 30 kanji sesi ini & acak
-                sessionKanji = shuffle(kanjiList.slice(sessionStartIndex, sessionStartIndex + sessionSize));
-                currentQuestionIndex = 0;
-                currentQuestionCount = 0;
-                correctAnswersCount = 0;
-              //  lives = 2;
-              //  document.getElementById('lives').textContent = '❤️❤️';
-        
-                document.getElementById('session-container').style.display = 'none';
-                document.getElementById('question-container').style.display = 'block';
-                displayQuestion();
-            };
-        
-            sessionsContainer.appendChild(btn);
-        }
+    const btn = document.createElement('button');
+    btn.textContent = `Sesi ${i}`;
+    btn.style.padding = "15px 20px";
+    btn.style.margin = "10px";
+    btn.style.borderRadius = "15px";
+    btn.style.cursor = "pointer"; // selalu bisa dipilih
+    btn.style.backgroundColor = "#008CBA"; // selalu biru
+    btn.style.color = "white";
+    btn.disabled = false; // jangan di-lock
+
+    btn.onclick = () => {
+        sessionStartIndex = (i - 1) * sessionSize;
+        currentSession = i; // tandai sesi yang aktif
+
+        // ambil 30 kanji sesi ini & acak
+        sessionKanji = shuffle(kanjiList.slice(sessionStartIndex, sessionStartIndex + sessionSize));
+        currentQuestionIndex = 0;
+        currentQuestionCount = 0;
+        correctAnswersCount = 0;
+
+        document.getElementById('session-container').style.display = 'none';
+        document.getElementById('question-container').style.display = 'block';
+        displayQuestion();
+    };
+
+    sessionsContainer.appendChild(btn);
+}
         
         // ==================== Kode kuis ====================
         function generateChoices(question) {
