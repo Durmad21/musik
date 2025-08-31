@@ -25,18 +25,19 @@
       
             #question-container {
                background-color: rgba(0, 0, 0, 0.2);
-               padding: 40px;
+               padding: 5% 3%;
                border-radius: 15px;
                display: flex;                /* aktifkan flexbox */
                flex-direction: column;       /* biar elemen bertumpuk vertikal */
                justify-content: center;      /* center vertikal */
                align-items: center;          /* center horizontal */
-               min-height: 60vh;             /* tinggi kontainer cukup */
+               min-height: auto;             /* tinggi kontainer cukup */
                text-align: center;           /* pastikan semua teks center */
              }
              
              .kanji {
-               font-size: 300px;           
+                  font-size: 15vw;   /* 15% dari lebar layar */
+                   
                font-weight: bold;           /* ganti 5 jadi bold */
                font-family: "Yu Gothic UI", "Meiryo", "MS PGothic", "MS Gothic", sans-serif;
                margin-bottom: 80px;
@@ -138,7 +139,7 @@
             @media (max-width: 375px) {
               h1 { font-size: 30px; }
               .question { font-size: 26px; }
-              .kanji { font-size: 50px; }
+              .kanji { font-size: 5% 3%; }
               .choice { font-size: 18px; width: 90%; }
               .result { font-size: 20px; }
               .next-btn { font-size: 16px; padding: 8px 10px; }
@@ -158,7 +159,7 @@
             <p class="question" id="question"> <span id="kanji" class="kanji"></span></p>
             <div class="choices" id="choices"></div>
             <div class="result" id="result"></div>
-            <button class="back-btn" onclick="window.location.href='https://durmad21.github.io/musik/JFTA2.html';">Kembali</button>
+            <button class="back-btn" onclick="window.location.href='https://adewij.github.io/musik/index.html';">Kembali</button>
             <button class="next-btn" id="next-btn" style="display: none;">Lanjut</button>
       
             <audio id="background-audio" loop>
@@ -177,12 +178,12 @@
         const correctAudio = new Audio('https://adewij.github.io/Adewij/correct.mp3');
         const wrongAudio = new Audio('https://adewij.github.io/Adewij/wrong.mp3');
         const backgroundAudio = document.getElementById('background-audio');
-
-  // Mute semua audio
+        
+        // Mute semua audio
         correctAudio.muted = true;
         wrongAudio.muted = true;
         backgroundAudio.muted = true;
-              
+      
         document.body.addEventListener('click', () => {
           if (backgroundAudio.paused) {
             backgroundAudio.play().catch((error) => { console.error(error); });
