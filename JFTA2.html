@@ -687,6 +687,259 @@
                     { kanji: '自転車', answer: 'Sepeda ', romaji: 'じてんしゃ' },
                  
         ];
+        
+        const kanjiReadings = [
+                  { kanji: '人', kun: 'ひと', on: 'ジン, ニン' },
+                  { kanji: '一', kun: 'ひと(つ)', on: 'イチ, イツ' },
+                  { kanji: '日', kun: 'ひ, か', on: 'ニチ, ジツ' },
+                  { kanji: '大', kun: 'おお(きい)', on: 'ダイ, タイ' },
+                  { kanji: '年', kun: 'とし', on: 'ネン' },
+                  { kanji: '出', kun: 'で(る), だ(す)', on: 'シュツ, スイ' },
+                  { kanji: '本', kun: 'もと', on: 'ホン' },
+                  { kanji: '中', kun: 'なか', on: 'チュウ' },
+                  { kanji: '子', kun: 'こ', on: 'シ, ス' },
+                  { kanji: '見', kun: 'み(る), み(える), み(せる)', on: 'ケン' },
+                  { kanji: '国', kun: 'くに', on: 'コク' },
+                  { kanji: '上', kun: 'うえ, あ(がる), のぼ(る)', on: 'ジョウ, ショウ' },
+                  { kanji: '分', kun: 'わ(ける), わ(かる)', on: 'ブン, フン, ブ' },
+                  { kanji: '生', kun: 'い(きる), う(まれる), なま', on: 'セイ, ショウ' },
+                  { kanji: '行', kun: 'い(く), ゆ(く), おこな(う)', on: 'コウ, ギョウ' },
+                  { kanji: '二', kun: 'ふた(つ)', on: 'ニ' },
+                  { kanji: '間', kun: 'あいだ, ま', on: 'カン, ケン' },
+                  { kanji: '時', kun: 'とき', on: 'ジ' },
+                  { kanji: '気', kun: '-', on: 'キ, ケ' },
+                  { kanji: '十', kun: 'とお', on: 'ジュウ, ジッ' },
+                  { kanji: '女', kun: 'おんな, め', on: 'ジョ, ニョ, ニョウ' },
+                  { kanji: '三', kun: 'みっ(つ)', on: 'サン' },
+                  { kanji: '前', kun: 'まえ', on: 'ゼン' },
+                  { kanji: '入', kun: 'はい(る), い(れる)', on: 'ニュウ' },
+                  { kanji: '小', kun: 'ちい(さい), こ, お', on: 'ショウ' },
+                  { kanji: '後', kun: 'のち, うし(ろ), あと', on: 'ゴ, コウ' },
+                  { kanji: '長', kun: 'なが(い)', on: 'チョウ' },
+                  { kanji: '下', kun: 'した, さ(がる), くだ(る)', on: 'カ, ゲ' },
+                  { kanji: '学', kun: 'まな(ぶ)', on: 'ガク' },
+                  { kanji: '月', kun: 'つき', on: 'ゲツ, ガツ' },
+                  { kanji: '何', kun: 'なに, なん', on: 'カ' },
+                  { kanji: '来', kun: 'く(る), きた(る), き(ます)', on: 'ライ' },
+                  { kanji: '話', kun: 'はな(す), はなし', on: 'ワ' },
+                  { kanji: '山', kun: 'やま', on: 'サン' },
+                  { kanji: '高', kun: 'たか(い)', on: 'コウ' },
+                  { kanji: '今', kun: 'いま', on: 'コン, キン' },
+                  { kanji: '書', kun: 'か(く)', on: 'ショ' },
+                  { kanji: '五', kun: 'いつ(つ)', on: 'ゴ' },
+                  { kanji: '名', kun: 'な', on: 'メイ, ミョウ' },
+                  { kanji: '金', kun: 'かね, かな', on: 'キン, コン' },
+                  { kanji: '男', kun: 'おとこ', on: 'ダン, ナン' },
+                  { kanji: '外', kun: 'そと, はず(す), はず(れる)', on: 'ガイ, ゲ' },
+                  { kanji: '四', kun: 'よっ(つ), よん', on: 'シ' },
+                  { kanji: '先', kun: 'さき', on: 'セン' },
+                  { kanji: '川', kun: 'かわ', on: 'セン' },
+                  { kanji: '東', kun: 'ひがし', on: 'トウ' },
+                  { kanji: '聞', kun: 'き(く), き(こえる)', on: 'ブン, モン' },
+                  { kanji: '語', kun: 'かた(る), かた(らう)', on: 'ゴ' },
+                  { kanji: '九', kun: 'ここの(つ)', on: 'キュウ, ク' },
+                  { kanji: '食', kun: 'た(べる), く(う)', on: 'ショク, ジキ' },
+                  { kanji: '八', kun: 'やっ(つ)', on: 'ハチ' },
+                  { kanji: '水', kun: 'みず', on: 'スイ' },
+                  { kanji: '天', kun: 'あま, あめ', on: 'テン' },
+                  { kanji: '木', kun: 'き, こ', on: 'ボク, モク' },
+                  { kanji: '六', kun: 'むっ(つ)', on: 'ロク' },
+                  { kanji: '万', kun: 'よろず', on: 'マン, バン' },
+                  { kanji: '白', kun: 'しろ, しら', on: 'ハク, ビャク' },
+                  { kanji: '七', kun: 'なな(つ)', on: 'シチ' },
+                  { kanji: '円', kun: 'まる, まる(い)', on: 'エン' },
+                  { kanji: '電', kun: '-', on: 'デン' },
+                  { kanji: '父', kun: 'ちち', on: 'フ' },
+                  { kanji: '北', kun: 'きた', on: 'ホク' },
+                  { kanji: '車', kun: 'くるま', on: 'シャ' },
+                  { kanji: '母', kun: 'はは', on: 'ボ' },
+                  { kanji: '半', kun: 'なか(ば)', on: 'ハン' },
+                  { kanji: '百', kun: 'もも', on: 'ヒャク' },
+                  { kanji: '土', kun: 'つち', on: 'ド, ト' },
+                  { kanji: '西', kun: 'にし', on: 'セイ, サイ' },
+                  { kanji: '読', kun: 'よ(む)', on: 'ドク, トク, トウ' },
+                  { kanji: '千', kun: 'ち', on: 'セン' },
+                  { kanji: '校', kun: '-', on: 'コウ' },
+                  { kanji: '右', kun: 'みぎ', on: 'ウ, ユウ' },
+                  { kanji: '南', kun: 'みなみ', on: 'ナン, ナ' },
+                  { kanji: '左', kun: 'ひだり', on: 'サ' },
+                  { kanji: '友', kun: 'とも', on: 'ユウ' },
+                  { kanji: '火', kun: 'ひ', on: 'カ' },
+                  { kanji: '毎', kun: '-', on: 'マイ' },
+                  { kanji: '雨', kun: 'あめ, あま', on: 'ウ' },
+                  { kanji: '休', kun: 'やす(む), やす(まる)', on: 'キュウ' },
+                  { kanji: '午', kun: '-', on: 'ゴ' },
+                  { kanji: '言', kun: 'い(う), こと', on: 'ゲン, ゴン' },
+                  { kanji: '手', kun: 'て, た', on: 'シュ' },
+                  { kanji: '自', kun: 'みずか(ら)', on: 'ジ, シ' },
+                  { kanji: '者', kun: 'もの', on: 'シャ' },
+                  { kanji: '事', kun: 'こと', on: 'ジ' },
+                  { kanji: '思', kun: 'おも(う)', on: 'シ' },
+                  { kanji: '会', kun: 'あ(う)', on: 'カイ, エ' },
+                  { kanji: '家', kun: 'いえ, や', on: 'カ, ケ' },
+                  { kanji: '的', kun: 'まと', on: 'テキ' },
+                  { kanji: '方', kun: 'かた, かたち', on: 'ホウ' },
+                  { kanji: '地', kun: '-', on: 'チ, ジ' },
+                  { kanji: '目', kun: 'め, ま', on: 'モク, ボク' },
+                  { kanji: '場', kun: 'ば', on: 'ジョウ' },
+                  { kanji: '代', kun: 'か(わる), か(える), よ, しろ', on: 'ダイ, タイ' },
+                  { kanji: '私', kun: 'わたし, わたくし', on: 'シ' },
+                  { kanji: '立', kun: 'た(つ), た(てる)', on: 'リツ, リュウ' },
+                  { kanji: '物', kun: 'もの', on: 'ブツ, モツ' },
+                  { kanji: '田', kun: 'た', on: 'デン' },
+                  { kanji: '体', kun: 'からだ', on: 'タイ, テイ' },
+                  { kanji: '動', kun: 'うご(く), うご(かす)', on: 'ドウ' },
+                  { kanji: '社', kun: 'やしろ', on: 'シャ' },
+                  { kanji: '知', kun: 'し(る)', on: 'チ' },
+                  { kanji: '理', kun: 'ことわり', on: 'リ' },
+                  { kanji: '同', kun: 'おな(じ)', on: 'ドウ' },
+                  { kanji: '心', kun: 'こころ', on: 'シン' },
+                  { kanji: '発', kun: 'た(つ), あば(く)', on: 'ハツ, ホツ' },
+                  { kanji: '作', kun: 'つく(る)', on: 'サク, サ' },
+                  { kanji: '新', kun: 'あたら(しい), あら(た), にい', on: 'シン' },
+                  { kanji: '世', kun: 'よ', on: 'セイ, セ, ソウ' },
+                  { kanji: '度', kun: 'たび', on: 'ド, ト, タク' },
+                  { kanji: '明', kun: 'あか(るい), あき(らか)', on: 'メイ, ミョウ' },
+                  { kanji: '力', kun: 'ちから', on: 'リョク, リキ' },
+                  { kanji: '意', kun: '-', on: 'イ' },
+                  { kanji: '用', kun: 'もち(いる)', on: 'ヨウ' },
+                  { kanji: '主', kun: 'ぬし, おも', on: 'シュ, ス' },
+                  { kanji: '通', kun: 'とお(る), かよ(う)', on: 'ツウ' },
+                  { kanji: '文', kun: 'ふみ', on: 'ブン, モン' },
+                  { kanji: '屋', kun: 'や', on: 'オク' },
+                  { kanji: '業', kun: 'わざ', on: 'ギョウ, ゴウ' },
+                  { kanji: '持', kun: 'も(つ)', on: 'ジ' },
+                  { kanji: '道', kun: 'みち', on: 'ドウ, トウ' },
+                  { kanji: '身', kun: 'み', on: 'シン' },
+                  { kanji: '不', kun: '-', on: 'フ, ブ' },
+                  { kanji: '口', kun: 'くち', on: 'コウ, ク' },
+                  { kanji: '多', kun: 'おお(い)', on: 'タ' },
+                  { kanji: '野', kun: 'の', on: 'ヤ' },
+                  { kanji: '考', kun: 'かんが(える)', on: 'コウ' },
+                  { kanji: '開', kun: 'ひら(く), あ(く), あ(ける)', on: 'カイ' },
+                  { kanji: '教', kun: 'おし(える), おそ(わる)', on: 'キョウ' },
+                  { kanji: '近', kun: 'ちか(い)', on: 'キン' },
+                  { kanji: '以', kun: '-', on: 'イ' },
+                  { kanji: '問', kun: 'と(う), とん', on: 'モン' },
+                  { kanji: '正', kun: 'ただ(しい), まさ', on: 'セイ, ショウ' },
+                  { kanji: '真', kun: 'ま, まこと', on: 'シン' },
+                  { kanji: '味', kun: 'あじ, あじ(わう)', on: 'ミ' },
+                  { kanji: '界', kun: '-', on: 'カイ' },
+                  { kanji: '無', kun: 'な(い)', on: 'ム, ブ' },
+                  { kanji: '少', kun: 'すく(ない), すこ(し)', on: 'ショウ' },
+                  { kanji: '海', kun: 'うみ', on: 'カイ' },
+                  { kanji: '切', kun: 'き(る), き(れる)', on: 'セツ, サイ' },
+                  { kanji: '重', kun: 'おも(い), かさ(なる)', on: 'ジュウ, チョウ' },
+                  { kanji: '集', kun: 'あつ(まる), あつ(める)', on: 'シュウ' },
+                  { kanji: '員', kun: '-', on: 'イン' },
+                  { kanji: '公', kun: 'おおやけ', on: 'コウ' },
+                  { kanji: '画', kun: '-', on: 'ガ, カク' },
+                  { kanji: '死', kun: 'し(ぬ)', on: 'シ' },
+                  { kanji: '安', kun: 'やす(い)', on: 'アン' },
+                  { kanji: '親', kun: 'おや, した(しい)', on: 'シン' },
+                  { kanji: '強', kun: 'つよ(い), し(いる)', on: 'キョウ, ゴウ' },
+                  { kanji: '使', kun: 'つか(う)', on: 'シ' },
+                  { kanji: '朝', kun: 'あさ', on: 'チョウ' },
+                  { kanji: '題', kun: '-', on: 'ダイ' },
+                  { kanji: '仕', kun: 'つか(える)', on: 'シ, ジ' },
+                  { kanji: '京', kun: '-', on: 'キョウ, ケイ' },
+                  { kanji: '足', kun: 'あし, た(りる), た(す)', on: 'ソク' },
+                  { kanji: '品', kun: 'しな', on: 'ヒン' },
+                  { kanji: '着', kun: 'き(る), つ(く)', on: 'チャク, ジャク' },
+                  { kanji: '別', kun: 'わか(れる)', on: 'ベツ' },
+                  { kanji: '音', kun: 'おと, ね', on: 'オン, イン' },
+                  { kanji: '元', kun: 'もと', on: 'ゲン, ガン' },
+                  { kanji: '特', kun: '-', on: 'トク' },
+                  { kanji: '風', kun: 'かぜ, かざ', on: 'フウ, フ' },
+                  { kanji: '夜', kun: 'よる, よ', on: 'ヤ' },
+                  { kanji: '空', kun: 'そら, あ(く), から', on: 'クウ' },
+                  { kanji: '有', kun: 'あ(る)', on: 'ユウ, ウ' },
+                  { kanji: '起', kun: 'お(きる), お(こす)', on: 'キ' },
+                  { kanji: '運', kun: 'はこ(ぶ)', on: 'ウン' },
+                  { kanji: '料', kun: '-', on: 'リョウ' },
+                  { kanji: '楽', kun: 'たの(しい), たの(しむ)', on: 'ガク, ラク' },
+                  { kanji: '色', kun: 'いろ', on: 'ショク, シキ' },
+                  { kanji: '帰', kun: 'かえ(る), かえ(す)', on: 'キ' },
+                  { kanji: '歩', kun: 'ある(く), あゆ(む)', on: 'ホ, ブ' },
+                  { kanji: '悪', kun: 'わる(い)', on: 'アク' },
+                  { kanji: '広', kun: 'ひろ(い), ひろ(まる)', on: 'コウ' },
+                  { kanji: '店', kun: 'みせ', on: 'テン' },
+                  { kanji: '町', kun: 'まち', on: 'チョウ' },
+                  { kanji: '住', kun: 'す(む), す(まう)', on: 'ジュウ' },
+                  { kanji: '売', kun: 'う(る), う(れる)', on: 'バイ' },
+                  { kanji: '待', kun: 'ま(つ)', on: 'タイ' },
+                  { kanji: '古', kun: 'ふる(い)', on: 'コ' },
+                  { kanji: '始', kun: 'はじ(める), はじ(まる)', on: 'シ' },
+                  { kanji: '終', kun: 'お(わる), お(える)', on: 'シュウ' },
+                  { kanji: '計', kun: 'はか(る)', on: 'ケイ' },
+                  { kanji: '院', kun: '-', on: 'イン' },
+                  { kanji: '送', kun: 'おく(る)', on: 'ソウ' },
+                  { kanji: '族', kun: '-', on: 'ゾク' },
+                  { kanji: '映', kun: 'うつ(す), うつ(る), は(える)', on: 'エイ' },
+                  { kanji: '買', kun: 'か(う)', on: 'バイ' },
+                  { kanji: '病', kun: 'やまい', on: 'ビョウ, ヘイ' },
+                  { kanji: '早', kun: 'はや(い), はや(まる), はや(める)', on: 'ソウ, サッ' },
+                  { kanji: '質', kun: 'たち, ただ(す), もと', on: 'シツ, シチ, チ' },
+                  { kanji: '台', kun: '-', on: 'ダイ, タイ' },
+                  { kanji: '室', kun: 'むろ', on: 'シツ' },
+                  { kanji: '可', kun: '-', on: 'カ' },
+                  { kanji: '建', kun: 'た(てる), た(つ)', on: 'ケン, コン' },
+                  { kanji: '転', kun: 'ころ(ぶ), ころ(がす)', on: 'テン' },
+                  { kanji: '医', kun: '-', on: 'イ' },
+                  { kanji: '止', kun: 'と(まる), と(める), や(む), や(める)', on: 'シ' },
+                  { kanji: '字', kun: 'あざ, あざな', on: 'ジ' },
+                  { kanji: '工', kun: '-', on: 'コウ, ク' },
+                  { kanji: '急', kun: 'いそ(ぐ)', on: 'キュウ' },
+                  { kanji: '図', kun: 'はか(る)', on: 'ズ, ト' },
+                  { kanji: '黒', kun: 'くろ, くろ(い)', on: 'コク' },
+                  { kanji: '花', kun: 'はな', on: 'カ' },
+                  { kanji: '英', kun: '-', on: 'エイ' },
+                  { kanji: '走', kun: 'はし(る)', on: 'ソウ' },
+                  { kanji: '青', kun: 'あお, あお(い)', on: 'セイ, ショウ' },
+                  { kanji: '答', kun: 'こた(える), こた(え)', on: 'トウ' },
+                  { kanji: '紙', kun: 'かみ', on: 'シ' },
+                  { kanji: '歌', kun: 'うた, うた(う)', on: 'カ' },
+                  { kanji: '注', kun: 'そそ(ぐ)', on: 'チュウ' },
+                  { kanji: '赤', kun: 'あか, あか(い), あか(らむ)', on: 'セキ, シャク' },
+                  { kanji: '春', kun: 'はる', on: 'シュン' },
+                  { kanji: '館', kun: 'やかた', on: 'カン' },
+                  { kanji: '旅', kun: 'たび', on: 'リョ' },
+                  { kanji: '験', kun: 'ため(す), こころ(みる)', on: 'ケン, ゲン' },
+                  { kanji: '写', kun: 'うつ(す), うつ(る)', on: 'シャ' },
+                  { kanji: '去', kun: 'さ(る)', on: 'キョ, コ' },
+                  { kanji: '研', kun: 'と(ぐ)', on: 'ケン' },
+                  { kanji: '飲', kun: 'の(む)', on: 'イン' },
+                  { kanji: '肉', kun: '-', on: 'ニク' },
+                  { kanji: '服', kun: '-', on: 'フク' },
+                  { kanji: '銀', kun: 'しろがね', on: 'ギン' },
+                  { kanji: '茶', kun: '-', on: 'チャ, サ' },
+                  { kanji: '究', kun: 'きわ(める)', on: 'キュウ' },
+                  { kanji: '洋', kun: '-', on: 'ヨウ' },
+                  { kanji: '兄', kun: 'あに', on: 'ケイ, キョウ' },
+                  { kanji: '秋', kun: 'あき', on: 'シュウ' },
+                  { kanji: '堂', kun: '-', on: 'ドウ' },
+                  { kanji: '週', kun: '-', on: 'シュウ' },
+                  { kanji: '習', kun: 'なら(う)', on: 'シュウ' },
+                  { kanji: '試', kun: 'こころ(みる), ため(す)', on: 'シ' },
+                  { kanji: '夏', kun: 'なつ', on: 'カ, ゲ' },
+                  { kanji: '弟', kun: 'おとうと', on: 'テイ, ダイ, デ' },
+                  { kanji: '鳥', kun: 'とり', on: 'チョウ' },
+                  { kanji: '犬', kun: 'いぬ', on: 'ケン' },
+                  { kanji: '夕', kun: 'ゆう', on: 'セキ' },
+                  { kanji: '魚', kun: 'さかな, うお', on: 'ギョ' },
+                  { kanji: '借', kun: 'か(りる)', on: 'シャク' },
+                  { kanji: '飯', kun: 'めし', on: 'ハン' },
+                  { kanji: '駅', kun: '-', on: 'エキ' },
+                  { kanji: '昼', kun: 'ひる', on: 'チュウ' },
+                  { kanji: '冬', kun: 'ふゆ', on: 'トウ' },
+                  { kanji: '姉', kun: 'あね', on: 'シ' },
+                  { kanji: '曜', kun: '-', on: 'ヨウ' },
+                  { kanji: '漢', kun: '-', on: 'カン' },
+                  { kanji: '牛', kun: 'うし', on: 'ギュウ' },
+                  { kanji: '妹', kun: 'いもうと', on: 'マイ' },
+                  { kanji: '貸', kun: 'か(す)', on: 'タイ' },
+                  { kanji: '勉', kun: 'つと(める)', on: 'ベン' }
+                ];
       
         const wrongAnswers = [
           // 100 kata sebelumnya
@@ -745,7 +998,7 @@
         
         for (let i = 1; i <= totalSessions; i++) {
             const btn = document.createElement('button');
-            btn.textContent = `Sesi ${i}`;
+            btn.textContent = `Sesi `;
             btn.style.padding = "15px 20px";
             btn.style.margin = "10px";
             btn.style.borderRadius = "15px";
@@ -813,6 +1066,40 @@
         
             return shuffle([...wrongs, correct]);
         }
+// 🔹 Fungsi ambil bacaan kun/on
+        function getKanjiInfo(word) {
+          let details = "";
+          for (const char of word) {
+            // cek apakah char adalah kanji (unicode range)
+            if (/[\u4E00-\u9FAF]/.test(char)) {
+              const found = kanjiReadings.find(k => k.kanji === char);
+              if (found) {
+                details += `${char}:   Kun = ${found.kun || "-"}, On = ${found.on || "-"}<br>`;
+              } else {
+                details += `${char}: ❓ Data belum tersedia<br>`;
+              }
+            }
+          }
+          return details;
+        }
+        
+        function getKanjiInfo(word) {
+          let details = "";
+          for (const char of word) {
+            if (/[\u4E00-\u9FAF]/.test(char)) {
+              const found = kanjiReadings.find(k => k.kanji === char);
+              if (found) {
+                details += `${char}: 
+                  <span style="color:red;">Kun</span> = ${found.kun || "-"}, 
+                  <span style="color:red;">On</span> = ${found.on || "-"}<br>`;
+              } else {
+                details += `${char}: ❓ Data belum tersedia<br>`;
+              }
+            }
+          }
+          return details;
+        }
+                
         
         function shuffle(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
@@ -851,30 +1138,33 @@
         }
         
         function checkAnswer(selectedAnswer, question, button) {
-            const choices = document.querySelectorAll('.choice');
-            choices.forEach(btn => btn.disabled = true);
-        
-            if (selectedAnswer === question.romaji) {
-                correctAudio.play();
-                button.style.backgroundColor = "#4CAF50"; // hijau
-                document.getElementById('result').innerHTML = `✅ Yeeay Benar...🥳<br><span style="color: yellow; font-weight: bold;">${question.answer}</span>`;
-                correctAnswersCount++;
-            } else {
-                wrongAudio.play();
-                button.style.backgroundColor = "#f44336"; // merah
-                choices.forEach(btn => {
-                    if (btn.textContent === question.romaji) {
-                        btn.style.backgroundColor = "#4CAF50"; // tandai yang benar
+                    const choices = document.querySelectorAll('.choice');
+                    choices.forEach(btn => btn.disabled = true);
+                
+                    if (selectedAnswer === question.romaji) {
+                        correctAudio.play();
+                        button.style.backgroundColor = "#4CAF50"; // hijau
+                        document.getElementById('result').innerHTML = 
+                            `✅ Yeeay Benar...🥳<br><span style="color: black; font-weight: bold;">${question.answer}</span><br><br>` 
+                            + getKanjiInfo(question.kanji);
+                        correctAnswersCount++;
+                    } else {
+                        wrongAudio.play();
+                        button.style.backgroundColor = "#f44336"; // merah
+                        choices.forEach(btn => {
+                            if (btn.textContent === question.romaji) {
+                                btn.style.backgroundColor = "#4CAF50"; // tandai yang benar
+                            }
+                        });
+                        document.getElementById('result').innerHTML = 
+                            `❌ Uupps Salah...😔<br><span style="color: black; font-weight: bold;">${question.answer}</span><br><br>` 
+                            + getKanjiInfo(question.kanji);
                     }
-                });
-                document.getElementById('result').innerHTML = 
-                            `❌ Uupps Salah...😔<br><span style="color: yellow; font-weight: bold;">${question.answer}</span>`;
-            }
+                
+                    document.getElementById('next-btn').style.display = 'block';
+                }
         
-            document.getElementById('next-btn').style.display = 'block';
-        }
-        
-        function nextQuestion() {
+            function nextQuestion() {
             if(currentQuestionCount < sessionKanji.length){
                 displayQuestion();
                 document.getElementById('result').textContent='';
