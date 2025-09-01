@@ -985,18 +985,22 @@
         let correctAnswersCount = 0;
         let totalQuestions = kanjiList.length;
         
-        const MAX_QUESTIONS_PER_SESSION = 30; // jumlah soal per sesi
         let currentQuestionCount = 0;         // hitung soal yg sudah muncul di sesi ini
         let currentSession = 1;               // sesi yang sedang dimainkan
         let sessionKanji = [];                 // kanji sesi acak
         
         // ==================== Sesi ====================
         const sessionsContainer = document.getElementById('sessions');
-        const totalSessions = 14;
+        const totalSessions = 25;
         const sessionSize = Math.ceil(kanjiList.length / totalSessions);
         let sessionStartIndex = 0;
-        
-        for (let i = 1; i <= totalSessions; i++) {
+        function getSessionSlice(i) {
+        const QUESTIONS_PER_SESSION = 20; // jumlah soal per sesi
+        const start = (i - 1) * QUESTIONS_PER_SESSION;
+        const end = i === totalSessions ? kanjiList.length : start + QUESTIONS_PER_SESSION;
+        return kanjiList.slice(start, end);
+      }
+    for (let i = 1; i <= totalSessions; i++) {
     const btn = document.createElement('button');
     btn.textContent = `Sesi ${i}`;
     btn.style.padding = "15px 20px";
@@ -1012,7 +1016,7 @@
         currentSession = i; // tandai sesi yang aktif
 
         // ambil 30 kanji sesi ini & acak
-        sessionKanji = shuffle(kanjiList.slice(sessionStartIndex, sessionStartIndex + sessionSize));
+        sessionKanji = shuffle(getSessionSlice(i));
         currentQuestionIndex = 0;
         currentQuestionCount = 0;
         correctAnswersCount = 0;
@@ -1068,22 +1072,6 @@
         function getKanjiInfo(word) {
           let details = "";
           for (const char of word) {
-            // cek apakah char adalah kanji (unicode range)
-            if (/[\u4E00-\u9FAF]/.test(char)) {
-              const found = kanjiReadings.find(k => k.kanji === char);
-              if (found) {
-                details += `${char}:   Kun = ${found.kun || "-"}, On = ${found.on || "-"}<br>`;
-              } else {
-                details += `${char}: ❓ Data belum tersedia<br>`;
-              }
-            }
-          }
-          return details;
-        }
-        
-        function getKanjiInfo(word) {
-          let details = "";
-          for (const char of word) {
             if (/[\u4E00-\u9FAF]/.test(char)) {
               const found = kanjiReadings.find(k => k.kanji === char);
               if (found) {
@@ -1108,11 +1096,6 @@
         }
         
         function displayQuestion() {
-            if (currentQuestionCount >= MAX_QUESTIONS_PER_SESSION) {
-                showFinalResult();
-                return;
-            }
-        
             if (currentQuestionCount >= sessionKanji.length) {
                 showFinalResult();
                 return;
@@ -1215,7 +1198,7 @@
         }
         
         function restartQuiz() {
-            sessionKanji = shuffle(kanjiList.slice(sessionStartIndex, sessionStartIndex + sessionSize));
+            sessionKanji = shuffle(getSessionSlice(currentSession));
             currentQuestionCount = 0;
             correctAnswersCount = 0;
        //     lives = 2;
