@@ -1203,41 +1203,40 @@
         
             if (score >= 70 && currentSession < totalSessions) {
                 const nextButton = sessionsContainer.children[currentSession];
-                nextButton.disabled = false;
-                nextButton.style.backgroundColor = "#008CBA";
-                nextButton.style.cursor = "pointer";
+                nextButton.disabled = false; // cukup aktifkan tombol, jangan ubah warnanya
             }
         }
         
         function restartQuiz() {
-            sessionKanji = shuffle(getSessionSlice(currentSession));
-            currentQuestionCount = 0;
-            correctAnswersCount = 0;
-       //     lives = 2;
-        //    document.getElementById('lives').textContent = '❤️❤️';
-        
-            document.getElementById('next-btn').textContent = 'Lanjut';
-            document.getElementById('next-btn').onclick = nextQuestion;
-            document.getElementById('result').textContent = '';
-            document.getElementById('next-btn').style.display = 'none';
-        
-            document.getElementById('question-container').style.display = 'none';
-            document.getElementById('session-container').style.display = 'block';
-        }
-        
-        document.addEventListener("DOMContentLoaded", () => {
-        // pasang fungsi nextQuestion
-        document.getElementById('next-btn').onclick = nextQuestion;
+        sessionKanji = shuffle(getSessionSlice(currentSession));
+        currentQuestionCount = 0;
+        correctAnswersCount = 0;
 
-        // restore warna tombol perfect dari localStorage
+        document.getElementById('next-btn').textContent = 'Lanjut';
+        document.getElementById('next-btn').onclick = nextQuestion;
+        document.getElementById('result').textContent = '';
+        document.getElementById('next-btn').style.display = 'none';
+
+        document.getElementById('question-container').style.display = 'none';
+        document.getElementById('session-container').style.display = 'block';
+    
+        restorePerfectButtons(); // pastikan tombol perfect tetap kuning
+    }
+
+    function restorePerfectButtons() {
         let perfectSessions = JSON.parse(localStorage.getItem('perfectSessions')) || [];
-        perfectSessions.forEach(sessionNum => {
+            perfectSessions.forEach(sessionNum => {
             const btn = sessionsContainer.children[sessionNum - 1];
-            btn.style.backgroundColor = "#FFFF00";
-            btn.style.color = "black";
+            btn.style.backgroundColor = "#FFFF00"; // kuning
+             btn.style.color = "black";
             btn.disabled = false;
             btn.style.cursor = "pointer";
-          });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+          document.getElementById('next-btn').onclick = nextQuestion;
+          restorePerfectButtons(); // restore tombol perfect saat pertama load
       });
         </script>
       </body>
