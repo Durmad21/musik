@@ -1167,6 +1167,18 @@
                 Aku bangga banget sama kamu 😘<br>
                 Terus semangat ya sayangku, Dina 💕
                 `;
+                const sessionButton = sessionsContainer.children[currentSession - 1];
+                sessionButton.style.backgroundColor = "#FFFF00";
+                sessionButton.style.color = "black";
+                sessionButton.disabled = false;
+                sessionButton.style.cursor = "pointer";
+
+                // ➤ Tambahkan kode ini
+                let perfectSessions = JSON.parse(localStorage.getItem('perfectSessions')) || [];
+                if (!perfectSessions.includes(currentSession)) {
+                perfectSessions.push(currentSession);
+                localStorage.setItem('perfectSessions', JSON.stringify(perfectSessions));
+                }
             } else if (score >= 70) {
                 resultText = `🎉 Selamat! Kamu lulus sesi ${currentSession}! 🏆<br>
                 Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
@@ -1213,9 +1225,20 @@
             document.getElementById('session-container').style.display = 'block';
         }
         
-        document.addEventListener("DOMContentLoaded",()=>{
-            document.getElementById('next-btn').onclick=nextQuestion;
-        });
+        document.addEventListener("DOMContentLoaded", () => {
+        // pasang fungsi nextQuestion
+        document.getElementById('next-btn').onclick = nextQuestion;
+
+        // restore warna tombol perfect dari localStorage
+        let perfectSessions = JSON.parse(localStorage.getItem('perfectSessions')) || [];
+        perfectSessions.forEach(sessionNum => {
+            const btn = sessionsContainer.children[sessionNum - 1];
+            btn.style.backgroundColor = "#FFFF00";
+            btn.style.color = "black";
+            btn.disabled = false;
+            btn.style.cursor = "pointer";
+          });
+      });
         </script>
       </body>
       </html>
