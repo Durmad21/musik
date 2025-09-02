@@ -1249,44 +1249,70 @@
             restorePerfectButtons();
         }
         function displayFinalQuestion() {
-            if (currentQuestionCount >= sessionKanji.length) {
-                showFinalResult();
-                return;
-            }
-        
-            const question = sessionKanji[currentQuestionCount];
-            document.getElementById('kanji').textContent = question.kanji;
-        
-            const choicesContainer = document.getElementById('choices');
-            choicesContainer.innerHTML = '';
-        
-            const answer = question.romaji.split('');
-            const shuffledChoices = shuffle([...answer]);
-        
-            clickedLetters = [];
-            userAnswer = '';
-            document.getElementById('result').textContent = '';
-        
-            shuffledChoices.forEach(char => {
-                const btn = document.createElement('button');
-                btn.classList.add('choice');
-                btn.textContent = char;
-                btn.onclick = () => typeFinalAnswer(char, question, btn);
-                choicesContainer.appendChild(btn);
-            });
-        
-            // 🔹 tombol hapus
+                if (currentQuestionCount >= sessionKanji.length) {
+                    showFinalResult();
+                    return;
+                }
+            
+                const question = sessionKanji[currentQuestionCount];
+                document.getElementById('kanji').textContent = question.kanji;
+            
+                const choicesContainer = document.getElementById('choices');
+                choicesContainer.innerHTML = '';
+            
+                const answer = question.romaji.split('');
+            
+                // 🔹 tambah 1 huruf kana random sebagai jawaban salah (pastikan beda dengan jawaban)
+                const kanaChars = ["あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ",
+                                   "た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ",
+                                   "ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ","を","ん"];
+                let randomKana;
+                do {
+                    randomKana = kanaChars[Math.floor(Math.random() * kanaChars.length)];
+                } while (answer.includes(randomKana)); // 🔹 pastikan bukan huruf jawaban
+            
+                const shuffledChoices = shuffle([...answer, randomKana]); 
+            
+                clickedLetters = [];
+                userAnswer = '';
+                document.getElementById('result').textContent = '';
+            
+                // 🔹 generate tombol pilihan
+                shuffledChoices.forEach(char => {
+                    const btn = document.createElement('button');
+                    btn.classList.add('choice');
+                    btn.textContent = char;
+            
+                    // tandai tombol dummy (yang random)
+                    if (char === randomKana) btn.dataset.dummy = "true";
+            
+                    btn.onclick = () => {
+                        if (btn.disabled) return; 
+                        typeFinalAnswer(char, question, btn); 
+                    };
+            
+                    choicesContainer.appendChild(btn);
+                });
+            
+                // 🔹 tombol hapu
+            // 🔹 tombol hapus (hapus semua, bukan cuma terakhir)
             const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = "⌫ Hapus";
+            deleteBtn.textContent = "⌫ Hapus Semua";
             deleteBtn.style.marginLeft = "10px";
             deleteBtn.style.padding = "10px 18px";
             deleteBtn.style.borderRadius = "8px";
             deleteBtn.onclick = () => {
                 if (userAnswer.length > 0) {
-                    userAnswer = userAnswer.slice(0, -1);
-                    document.getElementById('result').textContent = userAnswer;
-                    const lastBtn = clickedLetters.pop();
-                    if (lastBtn) lastBtn.style.backgroundColor = "";
+                    userAnswer = '';
+                    document.getElementById('result').textContent = '';
+                    
+                    // aktifkan kembali semua tombol yang dipilih
+                    clickedLetters.forEach(btn => {
+                        btn.style.backgroundColor = "";
+                        btn.disabled = false;
+                    });
+                    
+                    clickedLetters = []; // kosongkan daftar tombol yang sudah dipilih
                 }
             };
             choicesContainer.appendChild(deleteBtn);
@@ -1304,11 +1330,15 @@
         
                 if (isCorrect) {
                     correctAudio.play();
-                    resultDiv.innerHTML = `✅ Benar! $awaban: ${question.romaji} (${question.answer})`;
+                    resultDiv.innerHTML = `✅ Benar! Jawaban: ${question.romaji} (${question.answer})`;
                     // semua tombol jadi hijau
                                 document.querySelectorAll("#choices button.choice").forEach(b => {
-                                    b.style.backgroundColor = "limegreen";
-                                });
+                                        if (b.dataset.dummy === "true") {
+                                            b.style.backgroundColor = "red"; // huruf acak salah
+                                        } else {
+                                            b.style.backgroundColor = "limegreen"; // semua huruf jawaban → hijau
+                                        }
+                                    });
                     correctAnswersCount++;
                 } else {
                     wrongAudio.play();
