@@ -149,6 +149,7 @@
         </head>
         <body>
           <!-- Session selection -->
+          <div id="final-sessions-container" style="display:none; text-align:center; margin-top:20px;"></div>
           <div id="session-container" style="margin-bottom:20px;">
             <h2>Pilih Sesi</h2>
             <div id="sessions" style="display:flex; flex-wrap:wrap; justify-content:center; gap:10px;"></div>
@@ -988,10 +989,12 @@
         let currentQuestionCount = 0;         // hitung soal yg sudah muncul di sesi ini
         let currentSession = 1;               // sesi yang sedang dimainkan
         let sessionKanji = [];                 // kanji sesi acak
-        
+        let userInput = '';
+        let userAnswer = '';
+        let isFinalMode = false; // <— tambahkan
         // ==================== Sesi ====================
         const sessionsContainer = document.getElementById('sessions');
-        const totalSessions = 25;
+        const totalSessions = 19;
         const sessionSize = Math.ceil(kanjiList.length / totalSessions);
         let sessionStartIndex = 0;
         function getSessionSlice(i) {
@@ -1012,6 +1015,7 @@
     btn.disabled = false; // jangan di-lock
 
     btn.onclick = () => {
+        isFinalMode = false;     
         sessionStartIndex = (i - 1) * sessionSize;
         currentSession = i; // tandai sesi yang aktif
 
@@ -1028,7 +1032,20 @@
 
     sessionsContainer.appendChild(btn);
 }
-        
+        const finalBtn = document.createElement('button');
+        finalBtn.textContent = "Sesi Final";
+        finalBtn.style.padding = "15px 20px";
+        finalBtn.style.margin = "10px";
+        finalBtn.style.borderRadius = "15px";
+        finalBtn.style.cursor = "pointer";
+        finalBtn.style.backgroundColor = "#FF69B4"; // pink
+        finalBtn.style.color = "white";
+        finalBtn.onclick = () => {
+            document.getElementById('session-container').style.display = 'none';
+            document.getElementById('final-sessions-container').style.display = 'block';
+            createFinalSessionButtons();
+        };
+        sessionsContainer.appendChild(finalBtn);
         // ==================== Kode kuis ====================
         function generateChoices(question) {
             const correct = question.romaji;
@@ -1066,7 +1083,31 @@
                 if (randomWrong !== correct && !wrongs.includes(randomWrong)) wrongs.push(randomWrong);
             }
         
-            return shuffle([...wrongs, correct]);
+            const choices = shuffle([...wrongs, correct]);
+        
+            // ➕ Tambahin tombol kembali di akhir
+            const choicesContainer = document.getElementById("choices");
+            const backBtn = document.createElement("button");
+            backBtn.textContent = "⬅️ Kembali";
+            backBtn.style.padding = "8px 15px";
+            backBtn.style.marginTop = "15px";
+            backBtn.style.borderRadius = "8px";
+            backBtn.style.cursor = "pointer";
+            backBtn.style.backgroundColor = "#444";
+            backBtn.style.color = "white";
+        
+            backBtn.onclick = () => {
+                document.getElementById('question-container').style.display = 'none';
+                document.getElementById('final-sessions-container').style.display = 'block';
+            };
+        
+            // biar tidak dobel tombol kalau dipanggil ulang
+            if (!choicesContainer.querySelector(".back-btn")) {
+                backBtn.classList.add("back-btn");
+                choicesContainer.appendChild(backBtn);
+            }
+        
+            return choices;
         }
 // 🔹 Fungsi ambil bacaan kun/on
         function getKanjiInfo(word) {
@@ -1146,15 +1187,173 @@
                 }
         
             function nextQuestion() {
-            if(currentQuestionCount < sessionKanji.length){
-                displayQuestion();
-                document.getElementById('result').textContent='';
-                document.getElementById('next-btn').style.display='none';
+            document.getElementById('result').textContent = '';
+            document.getElementById('next-btn').style.display = 'none';
+            if(currentSession === 'final'){
+                displayFinalQuestion();
             } else {
-                showFinalResult();
+                displayQuestion();
             }
         }
+
+        function createFinalSessionButtons() {
+            const finalContainer = document.getElementById('final-sessions-container');
+            finalContainer.innerHTML = ''; // hapus tombol sesi lama
+            finalSessionButtons = []; // reset tombol final
         
+            // tombol sesi final
+            for (let i = 1; i <= totalSessions; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = `Sesi Final ${i}`;
+                btn.style.padding = "20px 20px";
+                btn.style.margin = "5px";
+                btn.style.borderRadius = "15px";
+                btn.style.cursor = "pointer";
+                btn.style.backgroundColor = "#FF69B4"; // pink
+                btn.style.color = "white";
+        
+                btn.onclick = () => {
+                    isFinalMode = true;
+                    currentSession = i;
+                    sessionKanji = shuffle(getSessionSlice(i));
+                    currentQuestionCount = 0;
+                    correctAnswersCount = 0;
+        
+                    finalContainer.style.display = 'none';
+                    document.getElementById('question-container').style.display = 'block';
+                    displayFinalQuestion();
+                };
+        
+                finalContainer.appendChild(btn);
+                finalSessionButtons.push(btn);
+            }
+        
+            // 🔹 tombol kembali tetap di sini, tidak akan hilang
+            const backBtn = document.createElement('button');
+            backBtn.textContent = 'Kembali';
+            backBtn.style.padding = "10px 20px";
+            backBtn.style.margin = "10px";
+            backBtn.style.borderRadius = "10px";
+            backBtn.style.cursor = "pointer";
+            backBtn.style.backgroundColor = "#008CBA"; // biru
+            backBtn.style.color = "white";
+        
+            backBtn.onclick = () => {
+                finalContainer.style.display = 'none';        
+                document.getElementById('session-container').style.display = 'block';
+            };
+        
+            finalContainer.appendChild(backBtn);
+        
+            // 🔹 restore tombol perfect sesi final
+            restorePerfectButtons();
+        }
+        function displayFinalQuestion() {
+            if (currentQuestionCount >= sessionKanji.length) {
+                showFinalResult();
+                return;
+            }
+        
+            const question = sessionKanji[currentQuestionCount];
+            document.getElementById('kanji').textContent = question.kanji;
+        
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+        
+            const answer = question.romaji.split('');
+            const shuffledChoices = shuffle([...answer]);
+        
+            clickedLetters = [];
+            userAnswer = '';
+            document.getElementById('result').textContent = '';
+        
+            shuffledChoices.forEach(char => {
+                const btn = document.createElement('button');
+                btn.classList.add('choice');
+                btn.textContent = char;
+                btn.onclick = () => typeFinalAnswer(char, question, btn);
+                choicesContainer.appendChild(btn);
+            });
+        
+            // 🔹 tombol hapus
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = "⌫ Hapus";
+            deleteBtn.style.marginLeft = "10px";
+            deleteBtn.style.padding = "10px 18px";
+            deleteBtn.style.borderRadius = "8px";
+            deleteBtn.onclick = () => {
+                if (userAnswer.length > 0) {
+                    userAnswer = userAnswer.slice(0, -1);
+                    document.getElementById('result').textContent = userAnswer;
+                    const lastBtn = clickedLetters.pop();
+                    if (lastBtn) lastBtn.style.backgroundColor = "";
+                }
+            };
+            choicesContainer.appendChild(deleteBtn);
+        }
+        
+        function typeFinalAnswer(char, question, btn) {
+            userAnswer += char;
+            document.getElementById('result').textContent = userAnswer;
+        
+            clickedLetters.push(btn);
+            btn.style.backgroundColor = "#FFFF00"; // kuning
+            if (userAnswer.length === question.romaji.length) {
+                const resultDiv = document.getElementById('result');
+                const isCorrect = userAnswer === question.romaji;
+        
+                if (isCorrect) {
+                    correctAudio.play();
+                    resultDiv.innerHTML = `✅ Benar! $awaban: ${question.romaji} (${question.answer})`;
+                    // semua tombol jadi hijau
+                                document.querySelectorAll("#choices button.choice").forEach(b => {
+                                    b.style.backgroundColor = "limegreen";
+                                });
+                    correctAnswersCount++;
+                } else {
+                    wrongAudio.play();
+                    resultDiv.innerHTML = `❌ Salah! Jawaban: ${question.romaji} (${question.answer})`;
+                   // semua tombol jadi merah
+                                document.querySelectorAll("#choices button.choice").forEach(b => {
+                                    b.style.backgroundColor = "red";
+                                });
+                }
+        
+                // 🔒 Disable semua tombol pilihan
+                const allBtns = document.querySelectorAll("#choices button");
+                allBtns.forEach(b => b.disabled = true);
+        
+                // ⬅️ Tombol lanjut aja
+                const nextBtn = document.createElement("button");
+                nextBtn.textContent = "➡️ Lanjut";
+                nextBtn.style.marginTop = "10px";
+                nextBtn.style.padding = "8px 15px";
+                nextBtn.style.borderRadius = "8px";
+                nextBtn.style.cursor = "pointer";
+        
+                nextBtn.onclick = () => {
+                    currentQuestionCount++; // ✅ increment pindah ke sini saja!
+                    if (currentQuestionCount >= sessionKanji.length) {
+                        showSesiFinalResult(); 
+                    } else {
+                        userAnswer = '';
+                        displayFinalQuestion();
+                    }
+                };
+        
+                resultDiv.appendChild(document.createElement("br"));
+                resultDiv.appendChild(nextBtn);
+            }
+        }
+        function nextQuestion() {
+            document.getElementById('result').textContent = '';
+            document.getElementById('next-btn').style.display = 'none';
+            if (isFinalMode) {
+                displayFinalQuestion();
+            } else {
+                displayQuestion();
+            }
+        }
         function showFinalResult() {
             const score = Math.floor((correctAnswersCount / currentQuestionCount) * 100);
         
@@ -1174,12 +1373,13 @@
                 sessionButton.style.cursor = "pointer";
 
                 // ➤ Tambahkan kode ini
-                let perfectSessions = JSON.parse(localStorage.getItem('perfectSessions')) || [];
-                if (!perfectSessions.includes(currentSession)) {
-                perfectSessions.push(currentSession);
-                localStorage.setItem('perfectSessions', JSON.stringify(perfectSessions));
+                
+                let perfectNormal = JSON.parse(localStorage.getItem('perfectNormal')) || [];
+                if (!perfectNormal.includes(currentSession)) {
+                    perfectNormal.push(currentSession);
+                    localStorage.setItem('perfectNormal', JSON.stringify(perfectNormal));
                 }
-            } else if (score >= 70) {
+            }else if (score >= 70) {
                 resultText = `🎉 Selamat! Kamu lulus sesi ${currentSession}! 🏆<br>
                 Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
                 Skor: <span style="color:lime; font-size:24px; font-weight:bold;">${score}%</span>`;
@@ -1206,31 +1406,114 @@
                 nextButton.disabled = false; // cukup aktifkan tombol, jangan ubah warnanya
             }
         }
+
+       function showSesiFinalResult() {
+            // pakai answered untuk aman kalau sempat double-click
+            const answered = Math.min(currentQuestionCount, sessionKanji.length);
+            const score = Math.floor((correctAnswersCount / (answered || 1)) * 100);
         
+            let resultText = "";
+            if (score === 100) {
+                resultText = `
+                💖 Woooow Dinaaa!!! 💖<br>
+                Kamu PERFECT banget!! 🎉<br>
+                Semua soal benar 100%! 🏆<br><br>
+                Aku bangga banget sama kamu 😘<br>
+                Terus semangat ya sayangku, Dina 💕
+                `;
+        
+                // 👉 Jangan warnai tombol sesi saat FINAL
+                if (isFinalMode && finalSessionButtons[currentSession - 1]) {
+            const btn = finalSessionButtons[currentSession - 1];
+            btn.style.backgroundColor = "#FFFF00";
+            btn.style.color = "black";
+            btn.disabled = false;
+        }
+
+        // simpan ke localStorage
+        
+        let perfectFinal = JSON.parse(localStorage.getItem('perfectFinal')) || [];
+        if (!perfectFinal.includes(currentSession)) {
+            perfectFinal.push(currentSession);
+            localStorage.setItem('perfectFinal', JSON.stringify(perfectFinal));
+        }
+    } else if (score >= 70) {
+        resultText = `🎉 Selamat! Kamu lulus sesi ${currentSession}! 🏆<br>
+        Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
+        Skor: <span style="color:lime; font-size:24px; font-weight:bold;">${score}%</span>`;
+    } else {
+        resultText = `😢 Sayang sekali, sesi ${currentSession} belum lulus.<br>
+        Benar: ${correctAnswersCount} dari ${currentQuestionCount} soal.<br>
+        Skor: <span style="color:red; font-size:24px; font-weight:bold;">${score}%</span><br>
+        Coba lagi ya! 💪`;
+    }
+
+    document.getElementById('question-container').style.display = 'none';
+    document.getElementById('final-result-container').style.display = 'block';
+    document.getElementById('final-result-text').innerHTML = resultText;
+
+    const retryBtn = document.getElementById('retry-btn');
+    retryBtn.textContent = score >= 70 ? "Kembali ke Sesi Final" : "Coba Lagi";
+    retryBtn.onclick = () => {
+        // reset supaya soal tidak nambah
+        currentQuestionCount = 0;
+        correctAnswersCount = 0;
+        userAnswer = '';
+    
+        document.getElementById('final-result-container').style.display = 'none';
+        document.getElementById('final-sessions-container').style.display = 'block';
+    
+        // restore warna tombol sesi final yang perfect
+        restorePerfectButtons();
+    };
+
+            if (!isFinalMode && score >= 70 && currentSession < totalSessions) {
+                const nextButton = sessionsContainer.children[currentSession];
+                if (nextButton) nextButton.disabled = false;
+            }
+        }
+
+
         function restartQuiz() {
+        isFinalMode = false;  // <— tambahkan
         sessionKanji = shuffle(getSessionSlice(currentSession));
         currentQuestionCount = 0;
         correctAnswersCount = 0;
-
+    
         document.getElementById('next-btn').textContent = 'Lanjut';
         document.getElementById('next-btn').onclick = nextQuestion;
         document.getElementById('result').textContent = '';
         document.getElementById('next-btn').style.display = 'none';
-
+    
         document.getElementById('question-container').style.display = 'none';
         document.getElementById('session-container').style.display = 'block';
     
-        restorePerfectButtons(); // pastikan tombol perfect tetap kuning
+        restorePerfectButtons();
     }
 
     function restorePerfectButtons() {
-        let perfectSessions = JSON.parse(localStorage.getItem('perfectSessions')) || [];
-            perfectSessions.forEach(sessionNum => {
+        // sesi biasa
+        let perfectNormal = JSON.parse(localStorage.getItem('perfectNormal')) || [];
+        perfectNormal.forEach(sessionNum => {
             const btn = sessionsContainer.children[sessionNum - 1];
-            btn.style.backgroundColor = "#FFFF00"; // kuning
-             btn.style.color = "black";
-            btn.disabled = false;
-            btn.style.cursor = "pointer";
+            if(btn){
+                btn.style.backgroundColor = "#FFFF00"; // kuning
+                btn.style.color = "black";
+                btn.disabled = false;
+                btn.style.cursor = "pointer";
+            }
+        });
+    
+        // sesi final
+        let perfectFinal = JSON.parse(localStorage.getItem('perfectFinal')) || [];
+        perfectFinal.forEach(sessionNum => {
+            const btn = finalSessionButtons[sessionNum - 1];
+            if(btn){
+                btn.style.backgroundColor = "#FFFF00"; // kuning
+                btn.style.color = "black";
+                btn.disabled = false;
+                btn.style.cursor = "pointer";
+            }
         });
     }
 
