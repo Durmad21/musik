@@ -1056,11 +1056,11 @@
         let username = "";
         // ==================== Sesi ====================
         const sessionsContainer = document.getElementById('sessions');
-        const totalSessions = 19;
+        const totalSessions = 50;
         const sessionSize = Math.ceil(kanjiList.length / totalSessions);
         let sessionStartIndex = 0;
         function getSessionSlice(i) {
-        const QUESTIONS_PER_SESSION = 20; // jumlah soal per sesi
+        const QUESTIONS_PER_SESSION = 3; // jumlah soal per sesi
         const start = (i - 1) * QUESTIONS_PER_SESSION;
         const end = i === totalSessions ? kanjiList.length : start + QUESTIONS_PER_SESSION;
         return kanjiList.slice(start, end);
@@ -1140,14 +1140,14 @@
           document.getElementById("username-screen").style.display = "none";
           document.getElementById("session-container").style.display = "block";
         }
-function goBack() {
-  // Sembunyikan layar game
-  document.getElementById("question-container").style.display = "none";
-  document.getElementById("final-result-container").style.display = "none";
-
-  // Tampilkan menu sesi
-  document.getElementById("session-container").style.display = "block";
-}
+       function goBack() {
+          // Sembunyikan layar game
+          document.getElementById("question-container").style.display = "none";
+          document.getElementById("final-result-container").style.display = "none";
+        
+          // Tampilkan menu sesi
+          document.getElementById("session-container").style.display = "block";
+        }
         // ==================== Kode kuis ====================
         function generateChoices(question) {
             const correct = question.romaji;
